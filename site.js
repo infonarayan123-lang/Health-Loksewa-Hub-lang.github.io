@@ -796,5 +796,87 @@
     });
   }
 
-  window.HLSite = { SITE: SITE, https: https, email: email, txt: txt, niceDate: niceDate, DEFAULT_LINKS: DEFAULT_LINKS, cleanNews: cleanNews, cleanLinks: cleanLinks, cleanDocs: cleanDocs, cleanQotd: cleanQotd };
+
+  /* ---------- more calculators (Phase 7): sample size, risk and odds, BSA, IV drip rate. The sample size and risk-and-odds formulas are the SAME as the Health Loksewa app. Plain functions, no eval, nothing is sent anywhere. ---------- */
+  var CALC = {
+    Z: { '90': 1.645, '95': 1.96, '99': 2.576 },
+    num: function(v){ if(v === null || v === undefined) return NaN; var s = String(v).trim(); return s === '' ? NaN : Number(s); },
+    sampleSize: function(o){
+      var z = CALC.Z[String(o.conf)]; if(!z) return { error: 'Please choose a confidence level.' };
+      var pct = isNaN(o.pct) ? 50 : o.pct, margin = isNaN(o.margin) ? 5 : o.margin;
+      if(!(pct >= 1 && pct <= 99)) return { error: 'The expected proportion must be between 1 and 99 percent (leave it empty if you do not know: 50 is used).' };
+      if(!(margin >= 0.1 && margin <= 50)) return { error: 'The margin of error must be between 0.1 and 50 percent (leave it empty to use 5).' };
+      var pop = isNaN(o.pop) ? 0 : o.pop; if(pop < 0 || (pop > 0 && pop < 1) || pop > 1e8) return { error: 'The population size must be a whole number from 1 to 100,000,000, or empty.' };
+      var non = isNaN(o.non) ? 0 : o.non; if(non < 0 || non > 90) return { error: 'The expected non-response must be between 0 and 90 percent, or empty.' };
+      var p = pct / 100, e = margin / 100, n0 = (z * z * p * (1 - p)) / (e * e), n = n0;
+      if(pop > 0) n = n / (1 + ((n - 1) / pop));
+      var finalN = Math.ceil(n), out = { n: finalN, n0: Math.ceil(n0), z: z, corrected: pop > 0, conf: String(o.conf), pct: pct, margin: margin, pop: pop };
+      if(non > 0){ out.non = non; out.withNon = Math.ceil(finalN / (1 - non / 100)); }
+      return out;
+    },
+    riskOdds: function(o){
+      var A = o.a, B = o.b, C = o.c, D = o.d;
+      if([A, B, C, D].some(function(v){ return isNaN(v) || v < 0 || v !== Math.floor(v) || v > 1e8; }) || (A + B) <= 0 || (C + D) <= 0 || B <= 0 || C <= 0) return { error: 'Please enter whole numbers for all four boxes (B and C must be greater than 0).' };
+      var rE = A / (A + B), rU = C / (C + D), rr = rE / rU, or = (A * D) / (B * C), rd = rE - rU, out = { riskE: rE, riskU: rU, rr: rr, or: or, rd: rd, nnt: rd !== 0 ? Math.ceil(Math.abs(1 / rd)) : null, rrCI: null, orCI: null };
+      if(A > 0){ var se1 = Math.sqrt(1 / A - 1 / (A + B) + 1 / C - 1 / (C + D)); out.rrCI = [Math.exp(Math.log(rr) - 1.96 * se1), Math.exp(Math.log(rr) + 1.96 * se1)]; }
+      if(A > 0 && D > 0){ var se2 = Math.sqrt(1 / A + 1 / B + 1 / C + 1 / D); out.orCI = [Math.exp(Math.log(or) - 1.96 * se2), Math.exp(Math.log(or) + 1.96 * se2)]; }
+      return out;
+    },
+    bsa: function(o){
+      if(!(o.kg >= 2 && o.kg <= 500) || !(o.cm >= 50 && o.cm <= 260)) return { error: 'Please enter the weight in kg (2 to 500) and the height in cm (50 to 260).' };
+      return { bsa: Math.sqrt((o.cm * o.kg) / 3600) };
+    },
+    ivDrip: function(o){
+      var f = Number(o.factor); if([10, 15, 20, 60].indexOf(f) === -1) return { error: 'Please choose the drop factor printed on the infusion set.' };
+      var h = isNaN(o.hours) ? 0 : o.hours, m = isNaN(o.mins) ? 0 : o.mins, vol = o.vol;
+      if(!(vol >= 1 && vol <= 5000) || vol !== Math.floor(vol)) return { error: 'The volume must be a whole number of mL from 1 to 5000.' };
+      if(h < 0 || h > 72 || h !== Math.floor(h) || m < 0 || m > 59 || m !== Math.floor(m)) return { error: 'Please enter whole hours (0 to 72) and minutes (0 to 59).' };
+      var mins = h * 60 + m; if(mins < 1 || mins > 4320) return { error: 'The time must be from 1 minute to 72 hours.' };
+      var dpm = (vol * f) / mins;
+      return { dpm: dpm, rounded: Math.round(dpm), mlh: vol / (mins / 60), secPerDrop: dpm > 0 ? 60 / dpm : null, mins: mins, factor: f };
+    }
+  };
+  var f2 = function(x){ return (Math.round(x * 100) / 100).toFixed(2); };
+  function calcForm(formId, outId, run){
+    var form = document.getElementById(formId); if(!form) return;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var out = document.getElementById(outId); clear(out); out.classList.remove('err');
+      var r = run(function(id){ return CALC.num(document.getElementById(id).value); }, function(id){ return document.getElementById(id).value; });
+      if(r && r.error){ out.classList.add('err'); out.textContent = r.error; return; }
+      if(r && r.lines){ r.lines.forEach(function(l, i){ if(i === 0) out.appendChild(el('b', null, l)); else out.appendChild(el('span', 'small', l)); }); }
+    });
+  }
+  calcForm('ssForm', 'ssOut', function(v, raw){
+    var r = CALC.sampleSize({ pct: v('ssProp'), margin: v('ssMargin'), conf: raw('ssConf'), pop: v('ssPop'), non: v('ssNon') }); if(r.error) return r;
+    var L = ['Required sample size: ' + r.n, 'At ' + r.conf + '% confidence, with a margin of error of ' + r.margin + '% and an expected proportion of ' + r.pct + '%' + (r.corrected ? ', corrected for a population of ' + r.pop : '') + '.'];
+    if(r.corrected) L.push('Without the population correction the number would be ' + r.n0 + '.');
+    if(r.withNon) L.push('With ' + r.non + '% expected non-response, invite about ' + r.withNon + ' people.');
+    L.push('This is the usual formula for a simple random survey. A study with groups, clusters or comparisons needs a different calculation: ask a statistician.');
+    return { lines: L };
+  });
+  calcForm('roForm', 'roOut', function(v){
+    var r = CALC.riskOdds({ a: v('roA'), b: v('roB'), c: v('roC'), d: v('roD') }); if(r.error) return r;
+    var L = ['Relative risk (RR): ' + f2(r.rr) + (r.rrCI ? '  (95% CI ' + f2(r.rrCI[0]) + ' to ' + f2(r.rrCI[1]) + ')' : ''), 'Odds ratio (OR): ' + f2(r.or) + (r.orCI ? '  (95% CI ' + f2(r.orCI[0]) + ' to ' + f2(r.orCI[1]) + ')' : ''),
+      'Risk in the exposed: ' + f2(r.riskE * 100) + '%. Risk in the unexposed: ' + f2(r.riskU * 100) + '%.', 'Risk difference (attributable risk): ' + f2(r.rd * 100) + '%.', 'Number needed to treat or harm (NNT): ' + (r.nnt === null ? 'not defined (no difference)' : r.nnt)];
+    var ci = r.rrCI, ref = r.rr > 1 ? 'The risk is higher in the exposed group.' : r.rr < 1 ? 'The risk is lower in the exposed group.' : 'The risk is the same in both groups.';
+    L.push(ref + (ci ? (ci[0] <= 1 && ci[1] >= 1 ? ' The 95% interval includes 1, so this result could be due to chance.' : ' The 95% interval does not include 1.') : ''));
+    L.push('The odds ratio is the right measure for a case-control study. The relative risk is the right measure for a cohort study.');
+    return { lines: L };
+  });
+  calcForm('bsaForm', 'bsaOut', function(v){
+    var r = CALC.bsa({ kg: v('bsaKg'), cm: v('bsaCm') }); if(r.error) return r;
+    return { lines: ['Body surface area: ' + f2(r.bsa) + ' square metres', 'Mosteller formula: the square root of (height in cm times weight in kg, divided by 3600). For adults; it is used to learn how doses are scaled, never to decide a dose.'] };
+  });
+  calcForm('ivForm', 'ivOut', function(v, raw){
+    var r = CALC.ivDrip({ vol: v('ivVol'), hours: v('ivHours'), mins: v('ivMins'), factor: raw('ivDrop') }); if(r.error) return r;
+    var L = [r.rounded < 1 ? 'Less than 1 drop per minute' : 'About ' + r.rounded + ' drops per minute'];
+    if(r.rounded < 1) L.push('This is too slow to count by drops. In real care an infusion pump or a senior nurse is needed.');
+    else { L.push('That is about one drop every ' + (Math.round(r.secPerDrop * 10) / 10) + ' seconds.'); if(r.rounded > 200) L.push('This is a very fast rate. Please check the volume, the time and the drop factor.'); }
+    L.push('Flow: about ' + (Math.round(r.mlh * 10) / 10) + ' mL per hour.');
+    L.push('Formula: drops per minute = volume in mL times drop factor, divided by the time in minutes. For learning only: follow the doctor\'s order and your hospital protocol.');
+    return { lines: L };
+  });
+
+  window.HLSite = { SITE: SITE, https: https, email: email, txt: txt, niceDate: niceDate, DEFAULT_LINKS: DEFAULT_LINKS, cleanNews: cleanNews, cleanLinks: cleanLinks, cleanDocs: cleanDocs, cleanQotd: cleanQotd, calc: CALC };
 })();

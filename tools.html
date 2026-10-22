@@ -86,7 +86,59 @@
         </form>
         <div class="result" id="eddOut" aria-live="polite"></div>
       </div>
+      <div class="tool t3">
+        <div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 20c.2-2.4 1.6-4 4-4.5"/></svg></div>
+        <h3 class="h2like" style="font-size:1.35rem;margin:14px 0 6px">Sample size calculator</h3>
+        <p class="sub">How many people to study, for a survey that estimates a proportion (the usual formula, with the finite population correction).</p>
+        <form id="ssForm" novalidate>
+          <div class="field"><label for="ssProp">Expected proportion (%)</label><input id="ssProp" type="number" inputmode="decimal" step="any" min="1" max="99" placeholder="Leave empty for 50"></div>
+          <div class="field"><label for="ssMargin">Margin of error (%)</label><input id="ssMargin" type="number" inputmode="decimal" step="any" min="0.1" max="50" placeholder="Leave empty for 5"></div>
+          <div class="field"><label for="ssConf">Confidence level</label><select id="ssConf"><option value="90">90%</option><option value="95" selected>95%</option><option value="99">99%</option></select></div>
+          <div class="field"><label for="ssPop">Population size (leave empty if unknown)</label><input id="ssPop" type="number" inputmode="decimal" step="1" min="1" max="100000000" placeholder="For example 2000"></div>
+          <div class="field"><label for="ssNon">Expected non-response (%) (optional)</label><input id="ssNon" type="number" inputmode="decimal" step="any" min="0" max="90" placeholder="For example 10"></div>
+          <button class="btn btn-primary" type="submit">Calculate sample size</button>
+        </form>
+        <div class="result" id="ssOut" aria-live="polite"></div>
+      </div>
+      <div class="tool t4">
+        <div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div>
+        <h3 class="h2like" style="font-size:1.35rem;margin:14px 0 6px">Risk and odds (2 by 2 table)</h3>
+        <p class="sub">Relative risk, odds ratio, risk difference and number needed to treat from a 2 by 2 table.</p>
+        <form id="roForm" novalidate>
+          <div class="field"><label for="roA">Exposed, disease present (A)</label><input id="roA" type="number" inputmode="decimal" step="1" min="0" max="100000000" placeholder="Whole number"></div>
+          <div class="field"><label for="roB">Exposed, disease absent (B)</label><input id="roB" type="number" inputmode="decimal" step="1" min="0" max="100000000" placeholder="Whole number"></div>
+          <div class="field"><label for="roC">Unexposed, disease present (C)</label><input id="roC" type="number" inputmode="decimal" step="1" min="0" max="100000000" placeholder="Whole number"></div>
+          <div class="field"><label for="roD">Unexposed, disease absent (D)</label><input id="roD" type="number" inputmode="decimal" step="1" min="0" max="100000000" placeholder="Whole number"></div>
+          <button class="btn btn-primary" type="submit">Calculate</button>
+        </form>
+        <div class="result" id="roOut" aria-live="polite"></div>
+      </div>
+      <div class="tool t5">
+        <div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M12 8v6M8 11h8M10 22l2-8 2 8"/></svg></div>
+        <h3 class="h2like" style="font-size:1.35rem;margin:14px 0 6px">Body surface area (BSA)</h3>
+        <p class="sub">Body surface area from weight and height, with the Mosteller formula.</p>
+        <form id="bsaForm" novalidate>
+          <div class="field"><label for="bsaKg">Weight (kg)</label><input id="bsaKg" type="number" inputmode="decimal" step="0.1" min="2" max="500" placeholder="For example 62"></div>
+          <div class="field"><label for="bsaCm">Height (cm)</label><input id="bsaCm" type="number" inputmode="decimal" step="0.1" min="50" max="260" placeholder="For example 165"></div>
+          <button class="btn btn-primary" type="submit">Calculate BSA</button>
+        </form>
+        <div class="result" id="bsaOut" aria-live="polite"></div>
+      </div>
+      <div class="tool t6">
+        <div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/></svg></div>
+        <h3 class="h2like" style="font-size:1.35rem;margin:14px 0 6px">IV drip rate (for learning)</h3>
+        <p class="sub">Drops per minute from the volume, the time and the drop factor of the set. For study and exam practice only.</p>
+        <form id="ivForm" novalidate>
+          <div class="field"><label for="ivVol">Volume (mL)</label><input id="ivVol" type="number" inputmode="decimal" step="1" min="1" max="5000" placeholder="For example 1000"></div>
+          <div class="field"><label for="ivHours">Hours</label><input id="ivHours" type="number" inputmode="decimal" step="1" min="0" max="72" placeholder="For example 8"></div>
+          <div class="field"><label for="ivMins">Minutes (optional)</label><input id="ivMins" type="number" inputmode="decimal" step="1" min="0" max="59" placeholder="For example 30"></div>
+          <div class="field"><label for="ivDrop">Drop factor (drops per mL)</label><select id="ivDrop"><option value="10">10 (macro set)</option><option value="15">15 (macro set)</option><option value="20" selected>20 (macro set)</option><option value="60">60 (micro set)</option></select></div>
+          <button class="btn btn-primary" type="submit">Calculate drip rate</button>
+        </form>
+        <div class="result" id="ivOut" aria-live="polite"></div>
+      </div>
     </div>
+    <p class="disclaimer"><b>IV drip rate</b> is only for learning and exams. It must never be used to treat a patient. Always follow the doctor's order, the hospital protocol and the infusion set instructions, and ask a senior nurse. <b>Sample size, risk and odds</b> use the same formulas as the Health Loksewa app, with the standard simplifications; real research needs a statistician's advice.</p>
     <p class="disclaimer">These tools give general estimates for learning and are not medical advice. BMI is for adults and does not apply to children or pregnancy. Please talk to a health worker about your own health. More calculators (statistics, epidemiology, salary and more) are inside the app.</p>
   </div>
 </section>

@@ -430,3 +430,7 @@ nav.main a{padding:0 10px}
 @media (prefers-color-scheme:dark){.enq .err{color:#FCA5A5}}
 .enq .note{margin:0;color:var(--ink2)}
 @media (max-width:560px){.company{grid-template-columns:1fr;gap:2px}.company dd{margin-bottom:10px}}
+
+/* more calculators */
+.field select{width:100%;min-height:48px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:1rem}
+.result .small{overflow-wrap:anywhere}
