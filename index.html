@@ -17,286 +17,34 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"EducationalOrganization","name":"Health Loksewa","description":"MCQ practice, mock tests, past questions and study tools for Nepal's Loksewa health service exams.","sameAs":["https://www.facebook.com/share/1JEwtuyPrP/","https://www.youtube.com/@HealthLoksewaHub","https://www.tiktok.com/@health_loksewa_hub"]}
 </script>
-<style>
-:root{
-  --bg:#0A1424; --bg2:#0E1B33; --panel:#13233F; --panel2:#1B2F52; --ink:#FFFFFF; --ink2:#E2E8F0; --muted:#A9B8CE; --line:rgba(255,255,255,.14);
-  --c-teal:#2DD4BF; --c-sky:#38BDF8; --c-violet:#A78BFA; --c-rose:#FB7185; --c-amber:#FBBF24; --c-green:#4ADE80;
-  --link:#5EEAD4; --gold:#FBBF24; --btn-bg:#2DD4BF; --btn-ink:#06101F; --tile-ink:#06101F;
-  --g1:#5EEAD4; --g2:#7DD3FC; --g3:#C4B5FD;
-  --glow1:rgba(45,212,191,.26); --glow2:rgba(56,189,248,.26); --glow3:rgba(167,139,250,.24);
-  --shadow:0 18px 44px rgba(0,0,0,.40);
-}
-@media (prefers-color-scheme: light){
-  :root{
-    --bg:#F4F8FD; --bg2:#FFFFFF; --panel:#FFFFFF; --panel2:#E9F1FA; --ink:#0A1424; --ink2:#26344A; --muted:#475569; --line:rgba(10,20,36,.14);
-    --c-teal:#0F766E; --c-sky:#0369A1; --c-violet:#6D28D9; --c-rose:#BE123C; --c-amber:#B45309; --c-green:#15803D;
-    --link:#0F766E; --gold:#8A5A00; --btn-bg:#0F766E; --btn-ink:#FFFFFF; --tile-ink:#FFFFFF;
-    --g1:#0F766E; --g2:#1D4ED8; --g3:#6D28D9;
-    --glow1:rgba(15,118,110,.14); --glow2:rgba(3,105,161,.13); --glow3:rgba(109,40,217,.11);
-    --shadow:0 16px 36px rgba(10,20,36,.14);
-  }
-}
-*{box-sizing:border-box}
-[hidden]{display:none !important}   /* so that anything marked hidden is really hidden, whatever its other styling */
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink2);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Devanagari",Arial,sans-serif;line-height:1.6;font-size:16px;overflow-x:hidden}
-a{color:var(--link)}
-img,svg{max-width:100%}
-.skip{position:absolute;left:-999px;top:8px;background:var(--btn-bg);color:var(--btn-ink);padding:10px 16px;border-radius:8px;z-index:100;font-weight:700}
-.skip:focus{left:8px}
-:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
-.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
-h1,h2,h3{color:var(--ink);line-height:1.15;margin:0}
-h1,h2{text-wrap:balance}
-h1{font-size:clamp(2.15rem,5.6vw,3.7rem);letter-spacing:-.025em;font-weight:850}
-h2{font-size:clamp(1.65rem,3.6vw,2.4rem);letter-spacing:-.015em;font-weight:800}
-h3{font-size:1.12rem;font-weight:750}
-p{margin:0}
-.grad{background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
-@supports not (background-clip:text){.grad{color:var(--link);-webkit-text-fill-color:currentColor}}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--link);margin-bottom:12px}
-.eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--c-teal),var(--c-violet))}
-/* tile colours */
-.t1{--a:var(--c-teal);--b:var(--c-sky)} .t2{--a:var(--c-violet);--b:var(--c-sky)} .t3{--a:var(--c-rose);--b:var(--c-violet)}
-.t4{--a:var(--c-amber);--b:var(--c-rose)} .t5{--a:var(--c-green);--b:var(--c-teal)} .t6{--a:var(--c-sky);--b:var(--c-violet)}
-.tile{background-color:var(--a);background-image:linear-gradient(135deg,var(--a),var(--b));color:var(--tile-ink)}
-/* header */
-header.site{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:saturate(1.5) blur(12px);-webkit-backdrop-filter:saturate(1.5) blur(12px);border-bottom:1px solid var(--line)}
-header.site::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--c-teal),var(--c-sky),var(--c-violet),transparent);opacity:.7}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:850;font-size:1.12rem;letter-spacing:-.01em}
-.brand svg{width:38px;height:38px;flex:none}
-nav.main ul{display:flex;gap:4px;list-style:none;margin:0;padding:0;align-items:center}
-nav.main a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:var(--ink2);text-decoration:none;font-weight:650;border-radius:10px}
-nav.main a:hover{color:var(--ink);background:var(--panel)}
-nav.main a.btn-primary,nav.main a.btn-primary:hover{color:var(--btn-ink);background-color:var(--btn-bg)}
-.nav-toggle{display:none;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
-/* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 26px;border-radius:14px;font:inherit;font-weight:800;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
-.btn-primary{background-color:var(--btn-bg);background-image:linear-gradient(135deg,var(--btn-bg),color-mix(in srgb,var(--btn-bg) 70%,var(--c-sky)));color:var(--btn-ink)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px var(--glow1)}
-.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
-.btn-ghost:hover{border-color:var(--c-teal)}
-.btn[aria-disabled="true"]{opacity:.85;cursor:default;pointer-events:none}
-.btn-sm{min-height:44px;padding:0 18px}
-.btn svg{width:18px;height:18px}
-/* hero */
-.hero{position:relative;padding:60px 0 96px;overflow:hidden;background-color:var(--bg);
-  background-image:radial-gradient(620px 420px at 88% 8%,var(--glow2),transparent 62%),radial-gradient(560px 400px at 6% 0%,var(--glow1),transparent 62%),radial-gradient(520px 380px at 62% 100%,var(--glow3),transparent 62%)}
-.deco{position:absolute;inset:0;pointer-events:none;color:var(--c-teal);opacity:.35}
-.deco svg{position:absolute;width:34px;height:34px}
-.deco .d1{left:53%;top:7%;transform:rotate(12deg)} .deco .d2{left:2%;bottom:6%;width:22px;height:22px;color:var(--c-violet)} .deco .d3{right:5%;bottom:14%;color:var(--c-sky);width:44px;height:44px} .deco .d4{left:38%;bottom:12%;width:26px;height:26px;color:var(--c-amber)}
-.hero-grid{position:relative;display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:center}
-.hero p.lead{font-size:1.18rem;margin-top:20px;max-width:34em;color:var(--ink2)}
-.hero .ne{margin-top:10px;color:var(--muted);font-size:1rem}
-.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.trust{margin-top:22px;font-size:.9rem;color:var(--muted);max-width:36em}
-/* visual: phone + floating cards */
-.visual{position:relative;width:min(400px,100%);margin:0 auto;padding:58px 0 60px}
-.blob{position:absolute;border-radius:50%;filter:blur(36px);opacity:.55;pointer-events:none}
-.blob.b1{width:200px;height:200px;background:var(--c-violet);right:-30px;top:20px} .blob.b2{width:190px;height:190px;background:var(--c-teal);left:-30px;bottom:30px}
-.phone{position:relative;width:min(290px,80%);margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:38px;padding:13px;box-shadow:var(--shadow)}
-.screen{background:var(--bg);border-radius:28px;padding:14px;border:1px solid var(--line);overflow:hidden}
-.apphead{display:flex;align-items:center;gap:10px;margin:-14px -14px 12px;padding:14px;background-color:var(--c-teal);background-image:linear-gradient(120deg,var(--c-teal),var(--c-sky) 55%,var(--c-violet));color:var(--tile-ink)}
-.apphead .av{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.35);display:grid;place-items:center;flex:none}
-.apphead .av svg{width:18px;height:18px}
-.apphead b{display:block;font-size:.88rem;line-height:1.2}
-.apphead small{font-size:.74rem;font-weight:650}
-.tags{display:flex;gap:6px;flex-wrap:wrap}
-.tag2{padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:800}
-.tag2.a{background:color-mix(in srgb,var(--c-violet) 28%,var(--panel));color:var(--ink)}
-.tag2.b{background:color-mix(in srgb,var(--c-amber) 28%,var(--panel));color:var(--ink)}
-.screen .bar2{height:6px;background:var(--panel2);border-radius:9px;margin:10px 0 6px;overflow:hidden}
-.screen .bar2 i{display:block;height:100%;width:14%;background:linear-gradient(90deg,var(--c-teal),var(--c-sky));border-radius:9px}
-.screen .count{font-size:.72rem;color:var(--muted);font-weight:700;margin-bottom:8px}
-.screen .q{color:var(--ink);font-weight:750;font-size:.93rem;line-height:1.4}
-.screen .opt{margin-top:8px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;font-size:.85rem;color:var(--ink2);background:var(--panel);display:flex;justify-content:space-between;align-items:center;gap:8px}
-.screen .opt svg{width:17px;height:17px;flex:none}
-.screen .opt.ok{border-color:var(--c-green);background:color-mix(in srgb,var(--c-green) 20%,var(--panel));color:var(--ink);font-weight:750}
-.screen .opt.bad{border-color:var(--c-rose);background:color-mix(in srgb,var(--c-rose) 18%,var(--panel));color:var(--ink)}
-.screen .opt.ok svg{color:var(--c-green)} .screen .opt.bad svg{color:var(--c-rose)}
-.screen .why{margin-top:10px;font-size:.74rem;color:var(--muted);line-height:1.45}
-.float{position:absolute;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px 14px;box-shadow:var(--shadow);animation:floaty 6s ease-in-out infinite}
-.float div b{display:block;color:var(--ink);font-size:1rem;line-height:1.1}
-.float div span{font-size:.74rem;color:var(--muted);font-weight:650}
-.float.f1{right:2px;top:0} .float.f2{left:2px;bottom:0;animation-delay:-3s}
-.float .ring{width:40px;height:40px;flex:none}
-.float .fl{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none}
-.float .fl svg{width:22px;height:22px}
-@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-.sample{text-align:center;margin-top:12px;font-size:.78rem;color:var(--muted)}
-/* strip */
-.strip{position:relative;z-index:2;margin-top:-52px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
-.stat{display:flex;align-items:center;gap:14px;padding:20px 22px}
-.stat+.stat{border-left:1px solid var(--line)}
-.stat .si{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none}
-.stat .si svg{width:22px;height:22px}
-.stat div b{display:block;color:var(--ink);font-size:1.02rem;line-height:1.2}
-.stat div span{display:block;font-size:.85rem;line-height:1.35;margin-top:2px;color:var(--muted)}
-/* sections */
-section{padding:84px 0;position:relative}
-section.alt{background:var(--bg2)}
-section.alt::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--c-teal),var(--c-violet),transparent);opacity:.45}
-.head{max-width:44em;margin:0 0 40px}
-.head p{margin-top:14px;color:var(--ink2);font-size:1.05rem}
-.note{margin-top:20px;font-size:.92rem;color:var(--muted);max-width:44em}
-/* exams */
-.exams{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
-.excard{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px;transition:transform .18s ease,border-color .18s ease}
-.excard:hover{transform:translateY(-3px);border-color:var(--a)}
-.badge{min-width:54px;height:54px;border-radius:15px;display:grid;place-items:center;font-weight:850;font-size:.92rem;letter-spacing:.02em;flex:none}
-.excard h3{font-size:1rem;margin-bottom:2px}
-.excard p{font-size:.85rem;color:var(--muted)}
-/* features (bento) */
-.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
-.card{position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px;grid-column:span 4;transition:transform .2s ease,border-color .2s ease}
-.card.w6{grid-column:span 6}
-.card::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--a),transparent 68%);opacity:.22;pointer-events:none}
-.card:hover{transform:translateY(-4px);border-color:var(--a)}
-.card h3{margin:16px 0 8px;position:relative}
-.card p{color:var(--ink2);font-size:.97rem;position:relative}
-.ico{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;position:relative;box-shadow:0 8px 18px color-mix(in srgb,var(--a) 35%,transparent)}
-.ico svg{width:26px;height:26px}
-/* steps */
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;list-style:none;margin:0;padding:0;counter-reset:s}
-.steps li{counter-increment:s;position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px}
-.steps li::before{content:counter(s);display:grid;place-items:center;width:44px;height:44px;border-radius:50%;margin-bottom:14px;font-weight:850;font-size:1.1rem;background-color:var(--a);background-image:linear-gradient(135deg,var(--a),var(--b));color:var(--tile-ink)}
-.steps h3{margin-bottom:6px}
-/* plans */
-.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;max-width:860px}
-.plan{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:30px}
-.plan.pro{border:2px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(135deg,var(--c-teal),var(--c-sky),var(--c-violet)) border-box;box-shadow:0 18px 50px var(--glow3)}
-.plan .tag{display:inline-block;font-size:.76rem;font-weight:850;letter-spacing:.09em;text-transform:uppercase;color:var(--gold)}
-.plan h3{margin:8px 0 14px;font-size:1.4rem}
-.plan ul{list-style:none;margin:0 0 20px;padding:0}
-.plan li{padding:6px 0 6px 30px;position:relative;color:var(--ink2)}
-.plan li::before{content:"";position:absolute;left:3px;top:12px;width:14px;height:8px;border-left:3px solid var(--c-green);border-bottom:3px solid var(--c-green);transform:rotate(-45deg)}
-/* install */
-.install{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:28px}
-.install .card{grid-column:auto}
-.install .card h3{margin-top:0}
-.install ol{margin:10px 0 0;padding-left:20px;color:var(--ink2);position:relative}
-/* band */
-.bandwrap{padding:0 0 84px}
-.band{position:relative;overflow:hidden;border-radius:28px;padding:48px 32px;text-align:center;color:#E2E8F0;
-  background-color:#0A1424;background-image:radial-gradient(520px 260px at 12% 0%,rgba(45,212,191,.38),transparent 65%),radial-gradient(520px 260px at 90% 100%,rgba(167,139,250,.38),transparent 65%),radial-gradient(420px 220px at 60% 10%,rgba(56,189,248,.28),transparent 65%);border:1px solid rgba(255,255,255,.16)}
-.band h2{color:#FFFFFF}
-.band p{margin:12px auto 26px;max-width:34em;color:#E2E8F0}
-.band .cta{justify-content:center;margin-top:0}
-.band .btn-primary{background-color:#2DD4BF;background-image:linear-gradient(135deg,#2DD4BF,#38BDF8);color:#06101F}
-.band .btn-ghost{color:#FFFFFF;border-color:rgba(255,255,255,.35)}
-/* faq */
-details{background:var(--panel);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;transition:border-color .18s ease}
-details[open]{border-color:var(--c-teal)}
-summary{cursor:pointer;list-style:none;padding:18px 20px;font-weight:700;color:var(--ink);min-height:44px;display:flex;justify-content:space-between;gap:12px;align-items:center}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-size:1.5rem;line-height:1;color:var(--link);flex:none}
-details[open] summary::after{content:"–"}
-details .ans{padding:0 20px 18px;color:var(--ink2)}
-.contact{display:flex;flex-wrap:wrap;gap:12px}
-.contact a{display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 20px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:700;transition:transform .15s ease,border-color .15s ease}
-.contact a::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--a);flex:none}
-.contact a:hover{transform:translateY(-2px);border-color:var(--a)}
-.contact a[hidden]{display:none}
-/* footer */
-footer{position:relative;background:var(--bg2);padding:44px 0 52px;font-size:.92rem;color:var(--muted)}
-footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--c-teal),var(--c-sky),var(--c-violet),var(--c-rose),var(--c-amber))}
-.fgrid{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px}
-footer ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 20px}
-footer a{color:var(--ink2)}
-.disc{margin-top:22px;max-width:60em}
-/* news */
-.newslist{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
-.newscard{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--a);border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;gap:8px;transition:transform .18s ease,border-color .18s ease}
-.newscard:hover{transform:translateY(-3px);border-color:var(--a)}
-.newscard time{font-size:.8rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--link)}
-.newscard h3{font-size:1.1rem;line-height:1.3}
-.newscard p{color:var(--ink2);font-size:.95rem}
-.newscard .src{margin-top:auto;padding-top:6px;font-size:.88rem;color:var(--muted)}
-.newscard a.read{font-weight:800}
-/* reveal */
-.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
-.js .reveal.in{opacity:1;transform:none}
-@media (max-width:900px){
-  .hero-grid{grid-template-columns:1fr}
-  .visual-wrap{order:2}
-  .hero{padding:40px 0 84px}
-  section{padding:56px 0}
-  .bandwrap{padding-bottom:56px}
-  .nav-toggle{display:inline-flex;align-items:center}
-  nav.main{display:none;position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 20px 16px}
-  nav.main.open{display:block}
-  nav.main ul{flex-direction:column;align-items:stretch;gap:2px}
-  nav.main a{width:100%}
-  .card,.card.w6{grid-column:span 12}
-  .stat+.stat{border-left:0;border-top:1px solid var(--line)}
-  .float.f1{right:0} .float.f2{left:0}
-  .visual{padding:54px 0 56px}
-  .band{padding:38px 22px}
-}
-@media (min-width:901px) and (max-width:1100px){ .card{grid-column:span 6} .card.w6{grid-column:span 6} }
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto}
-  .btn,.card,.excard,.contact a,details{transition:none}
-  .float{animation:none}
-  .js .reveal{opacity:1;transform:none;transition:none}
-}
-
-/* ===== BOLD COLOUR-BLOCK STYLE (Oct 2026) ===== big type, vivid sections, scrolling banner, stickers.
-   ".vivid" sections always use the dark palette on a vivid background, in light AND dark mode, so text stays readable. */
-.vivid{--bg:#0A1424;--panel:#13233F;--panel2:#1B2F52;--ink:#FFFFFF;--ink2:#EEF2FF;--muted:#EBEFFB;--line:rgba(255,255,255,.30);
-  --c-teal:#2DD4BF;--c-sky:#38BDF8;--c-violet:#A78BFA;--c-rose:#FB7185;--c-amber:#FBBF24;--c-green:#4ADE80;--link:#5EEAD4;--gold:#FBBF24;
-  --btn-bg:#2DD4BF;--btn-ink:#06101F;--tile-ink:#06101F;color:var(--ink2)}
-.vivid .eyebrow{color:#FFFFFF}
-.vivid .eyebrow::before{background:linear-gradient(90deg,#FBBF24,#FB7185)}
-.vivid .grad{background:linear-gradient(90deg,#FBBF24,#FB7185) left bottom/100% .17em no-repeat;color:#FFFFFF;-webkit-text-fill-color:#FFFFFF;padding-bottom:.04em}
-.vivid .btn-ghost{color:#FFFFFF;border-color:rgba(255,255,255,.55)}
-.vivid .btn-ghost:hover{border-color:#FFFFFF;background:rgba(255,255,255,.10)}
-h1{font-size:clamp(2.25rem,5.3vw,3.85rem);letter-spacing:-.035em;font-weight:900;line-height:1.06}
-h2{font-size:clamp(1.9rem,4.4vw,3.05rem);letter-spacing:-.025em;font-weight:900;line-height:1.08}
-.btn{border-radius:99px;min-height:52px;padding:0 30px}
-.btn-sm{min-height:44px;padding:0 20px}
-.hero.vivid{background-color:#0F766E;background-image:radial-gradient(520px 380px at 90% 8%,rgba(251,113,133,.55),transparent 62%),radial-gradient(560px 420px at 4% 100%,rgba(251,191,36,.28),transparent 62%),linear-gradient(125deg,#4C1D95 0%,#1D4ED8 52%,#0F766E 100%)}
-.hero.vivid .deco{color:#FFFFFF;opacity:.30}
-.hero.vivid .blob.b1{background:#FB7185} .hero.vivid .blob.b2{background:#FBBF24}
-.sticker{position:absolute;z-index:3;left:0;top:14px;transform:rotate(-8deg);background:#FBBF24;color:#1B1200;font-weight:900;font-size:.95rem;padding:8px 16px;border-radius:99px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
-.marq{background-color:#BE185D;background-image:linear-gradient(90deg,#BE185D,#7E22CE 50%,#1D4ED8);color:#FFFFFF;overflow:hidden;padding:18px 0;border-top:1px solid rgba(255,255,255,.2);border-bottom:1px solid rgba(255,255,255,.2)}
-.marq .track{display:flex;width:max-content;animation:marq 34s linear infinite}
-.marq span{flex:none;font-size:clamp(1.15rem,2.6vw,1.7rem);font-weight:900;letter-spacing:-.01em;padding:0 22px;white-space:nowrap}
-.marq span::after{content:"\2726";margin-left:44px;color:#FDE68A}
-@keyframes marq{to{transform:translateX(-50%)}}
-section.feat.vivid{background-color:#1D4ED8;background-image:radial-gradient(520px 340px at 100% 0%,rgba(251,113,133,.40),transparent 62%),radial-gradient(520px 360px at 0% 100%,rgba(45,212,191,.32),transparent 62%),linear-gradient(135deg,#3B0764 0%,#4C1D95 38%,#1D4ED8 100%)}
-section.feat.vivid::before{display:none}
-.feat .card{background:rgba(10,20,36,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-@media (max-width:900px){.sticker{left:6px;top:8px}.deco .d1{display:none}}
-@media (prefers-reduced-motion: reduce){.marq .track{animation:none;flex-wrap:wrap;width:auto;justify-content:center}.marq span:nth-child(n+9){display:none}}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
 
 <header class="site">
   <div class="wrap bar">
-    <a class="brand" href="#top" aria-label="Health Loksewa home">
+    <a class="brand" href="index.html" aria-label="Health Loksewa home">
       <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2DD4BF"/><stop offset="1" stop-color="#38BDF8"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#lg)"/><path d="M26 14h12v12h12v12H38v12H26V38H14V26h12z" fill="#0A1424"/><circle cx="50" cy="14" r="5" fill="#FBBF24"/></svg>
       <span>Health Loksewa</span>
     </a>
     <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
     <nav class="main" id="menu" aria-label="Main">
       <ul>
-        <li><a href="#exams">Exams</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#how">How it works</a></li>
-        <li id="navNews" hidden><a href="#news">News</a></li>
-        <li><a href="#premium">Premium</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a class="btn btn-primary btn-sm" data-app href="#get">Open the app</a></li>
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="loksewa.html">Loksewa</a></li>
+        <li><a href="license.html">Licence</a></li>
+        <li><a href="library.html">Library</a></li><li><a href="products.html">Study packs</a></li>
+        <li><a href="news.html">News</a></li>
+        <li><a href="resources.html">Resources</a></li>
+        <li><a href="tools.html">Tools</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a class="btn btn-primary btn-sm" data-app href="index.html#get">Open the app</a></li>
       </ul>
     </nav>
   </div>
 </header>
+<div class="hlstrip" id="highlights" hidden><div class="wrap"><ul id="highlightList" aria-label="Highlights"></ul></div></div>
 
 <main id="main">
 <div id="top"></div>
@@ -379,6 +127,20 @@ section.feat.vivid::before{display:none}
   </div>
 </section>
 
+<section id="explore" class="alt" aria-labelledby="exp-h">
+  <div class="wrap">
+    <div class="head reveal"><span class="eyebrow">Explore</span><h2 id="exp-h">Everything for your Loksewa journey</h2><p>Official websites, news and free tools, all in one place, with the app for daily practice.</p></div>
+    <div class="explore reveal">
+      <a class="card t1" href="loksewa.html"><div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg></div><h3>Loksewa Aayog</h3><p>Official websites of the federal and provincial commissions, and what to check for syllabus, calendar and notices.</p><span class="go">Open the guide</span></a>
+      <a class="card t2" href="license.html"><div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><h3>Licence exams</h3><p>Find the council for your profession (NHPC, NMC, NNC, NPC, NAMC) and practise for BPH and HA licence exams.</p><span class="go">Find your council</span></a>
+      <a class="card t4" href="news.html"><div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>News and vacancies</h3><p>Short updates, notices and vacancies in our own words, each with a link to the official source.</p><span class="go">Read the latest</span></a>
+      <a class="card t5" href="resources.html"><div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><h3>Important links</h3><p>A searchable directory of official websites: commissions, councils, ministry, universities and journals.</p><span class="go">Browse the directory</span></a>
+      <a class="card t3" href="tools.html"><div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 6h6M9 11h2M13 11h2M9 15h2M13 15h2"/></svg></div><h3>Free tools</h3><p>A BMI calculator and a due date calculator. More calculators are inside the app.</p><span class="go">Use the tools</span></a>
+      <a class="card t6" href="about.html"><div class="ico tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg></div><h3>About us</h3><p>Who we are, how we work, and how to reach us.</p><span class="go">Learn more</span></a>
+    </div>
+  </div>
+</section>
+
 <section id="features" class="feat vivid" aria-labelledby="feat-h">
   <div class="wrap">
     <div class="head reveal">
@@ -406,6 +168,22 @@ section.feat.vivid::before{display:none}
   </div>
 </section>
 
+<section id="qotd" class="alt" aria-labelledby="qotd-h" hidden>
+  <div class="wrap narrow">
+    <div class="head"><span class="eyebrow">Question of the day</span><h2 id="qotd-h">Try today's question</h2><p>One new health MCQ every day. Pick an answer to see the explanation.</p></div>
+    <div class="qbox" data-qotd data-lazy-after="features"></div>
+    <div class="cta"><a class="btn btn-ghost" href="question-of-the-day.html">More about the question of the day</a></div>
+  </div>
+</section>
+
+<section id="latest" aria-labelledby="latest-h" hidden>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Latest updates</span><h2 id="latest-h">Newest documents</h2><p>The most recent syllabus, schedules and notices we have added.</p></div>
+    <ul class="doclist latestlist" id="latestList"></ul>
+    <div class="cta"><a class="btn btn-ghost" href="library.html">Open the full library</a></div>
+  </div>
+</section>
+
 <section id="how" aria-labelledby="how-h">
   <div class="wrap">
     <div class="head reveal"><span class="eyebrow">How it works</span><h2 id="how-h">Start in three simple steps</h2></div>
@@ -414,6 +192,13 @@ section.feat.vivid::before{display:none}
       <li class="t2"><h3>Choose your exam</h3><p>Sign up in a minute and pick the exam you are preparing for.</p></li>
       <li class="t3"><h3>Practise and track</h3><p>Do MCQs, take mock tests, review your mistakes and watch your progress grow.</p></li>
     </ol>
+  </div>
+</section>
+
+<section id="testimonials" aria-labelledby="ts-h" hidden>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Students say</span><h2 id="ts-h">Words from students</h2><p>Shared with the students' permission.</p></div>
+    <ul class="quotes" data-testi data-lazy-after="how"></ul>
   </div>
 </section>
 
@@ -481,120 +266,22 @@ section.feat.vivid::before{display:none}
 
 <footer>
   <div class="wrap">
-    <div class="fgrid">
+    <div class="fcols">
       <div><strong style="color:var(--ink)">Health Loksewa</strong><br>Study smarter for Nepal's health Loksewa exams.</div>
-      <ul aria-label="Legal">
+      <div><h2>Explore</h2><ul class="col"><li><a href="loksewa.html">Loksewa</a></li><li><a href="license.html">Licence</a></li><li><a href="library.html">Library</a></li><li><a href="products.html">Study packs</a></li><li><a href="news.html">News</a></li><li><a href="resources.html">Resources</a></li><li><a href="tools.html">Tools</a></li><li><a href="about.html">About</a></li><li><a href="faqs.html">FAQs</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div><h2>Study helpers</h2><ul class="col"><li><a href="question-of-the-day.html">Question of the day</a></li><li><a href="dictionary.html">Dictionary</a></li><li><a href="health-days.html">Health days</a></li><li><a href="public-holidays.html">Public holidays</a></li></ul></div>
+      <div><h2>Legal</h2><ul class="col">
         <li><a data-legal="privacy.html" href="#">Privacy Policy</a></li>
         <li><a data-legal="terms.html" href="#">Terms of Use</a></li>
         <li><a data-legal="community-rules.html" href="#">Community Rules</a></li>
         <li><a data-legal="delete-account.html" href="#">Delete your account</a></li>
-      </ul>
+      </ul></div>
     </div>
-    <p class="disc">Health Loksewa is an independent educational app and is not affiliated with the Public Service Commission (Lok Sewa Aayog). Study material is for exam preparation and is not medical advice.</p>
+    <p class="disc">Health Loksewa is an independent educational app and is not affiliated with the Public Service Commission (Lok Sewa Aayog). Study material is for exam preparation and is not medical advice. Links to other websites open sites we do not control: always check dates and rules on the official site.</p>
     <p class="disc">&copy; <span id="year">2026</span> Health Loksewa. All rights reserved.</p>
   </div>
 </footer>
 
-<script>
-/* ======= EASY SETTINGS: change these when you have your own domain ======= */
-(function(){
-  'use strict';
-  var SITE = {
-    appUrl:   'https://infonarayan123-lang.github.io/Health-loksewa-app/',   /* where "Open the app" goes */
-    legalUrl: 'https://infonarayan123-lang.github.io/Health-loksewa-app/',   /* where privacy.html, terms.html ... live */
-    apkUrl:   '',                                                            /* a direct link to the APK file, when you have one */
-    playUrl:  '',                                                            /* your Google Play link, when you have one */
-    settingsUrl: 'https://script.google.com/macros/s/AKfycbxqBp2dLfWM33AKsfBJfyBsbljSDBZaUQ19PhT6kjd7dehYbRqxH8HO-HT4NNMJT66vWg/exec?action=appSettings',
-    newsUrl:     'https://script.google.com/macros/s/AKfycbxqBp2dLfWM33AKsfBJfyBsbljSDBZaUQ19PhT6kjd7dehYbRqxH8HO-HT4NNMJT66vWg/exec?action=siteNews'   /* your news, from the Site News tab */
-  };
-  /* ======= nothing below needs editing ======= */
-  function https(u){ u = String(u == null ? '' : u).trim(); return /^https:\/\/[^\s"'<>\\]{4,300}$/i.test(u) ? u : ''; }
-  function email(e){ e = String(e == null ? '' : e).trim(); return /^[A-Za-z0-9._%+\-]{1,64}@[A-Za-z0-9.\-]{1,190}\.[A-Za-z]{2,}$/.test(e) ? e : ''; }
-  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
-
-  all('[data-app]').forEach(function(a){ var u = https(SITE.appUrl); if(u) a.setAttribute('href', u); });
-  all('[data-legal]').forEach(function(a){ var base = https(SITE.legalUrl); if(base) a.setAttribute('href', base + a.getAttribute('data-legal')); });
-  document.getElementById('year').textContent = String(new Date().getFullYear());
-
-  function android(playUrl){
-    var play = https(playUrl) || https(SITE.playUrl), apk = https(SITE.apkUrl);
-    ['androidBtn', 'androidBtn2'].forEach(function(id){
-      var b = document.getElementById(id); if(!b) return;
-      if(play){ b.textContent = 'Get it on Google Play'; b.setAttribute('href', play); b.removeAttribute('aria-disabled'); b.setAttribute('target', '_blank'); b.setAttribute('rel', 'noopener noreferrer'); }
-      else if(apk){ b.textContent = 'Download for Android'; b.setAttribute('href', apk); b.removeAttribute('aria-disabled'); }
-    });
-  }
-  android('');
-
-  function applySettings(s){
-    if(!s || typeof s !== 'object' || Array.isArray(s)) return;
-    all('[data-social]').forEach(function(a){
-      var key = a.getAttribute('data-social');
-      if(!Object.prototype.hasOwnProperty.call(s, key) || typeof s[key] !== 'string') return;
-      var u = https(s[key]);
-      if(u){ a.setAttribute('href', u); a.hidden = false; } else if(s[key].trim() === ''){ a.hidden = true; }
-    });
-    var m = Object.prototype.hasOwnProperty.call(s, 'contact_email') ? email(s.contact_email) : '';
-    if(m) document.getElementById('mailLink').setAttribute('href', 'mailto:' + m);
-    if(typeof s.play_store_url === 'string') android(s.play_store_url);
-  }
-  try{
-    var c = new AbortController(), t = setTimeout(function(){ c.abort(); }, 6000);
-    fetch(SITE.settingsUrl, { signal: c.signal }).then(function(r){ return r.json(); }).then(function(d){ clearTimeout(t); if(d && d.settings) applySettings(d.settings); }).catch(function(){ clearTimeout(t); });
-  }catch(e){}
-
-
-  /* ---- News and notices: your own items from the "Site News" tab of your Google Sheet. The section stays hidden until there is at least one item. ---- */
-  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  function niceDate(d){ if(typeof d !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return ''; var p = d.split('-'); var m = +p[1]; return (m >= 1 && m <= 12) ? (+p[2]) + ' ' + MONTHS[m - 1] + ' ' + p[0] : ''; }
-  function txt(v, max){ return (typeof v === 'string') ? v.replace(/\s+/g, ' ').trim().slice(0, max) : ''; }
-  function renderNews(items){
-    if(!Array.isArray(items)) return;
-    var clean = [];
-    items.slice(0, 60).forEach(function(it){
-      if(!it || typeof it !== 'object') return;
-      var title = txt(it.title, 140); if(!title) return;
-      if(clean.length < 30) clean.push({ title: title, summary: txt(it.summary, 300), source: txt(it.source, 60), link: https(it.link), date: niceDate(it.date), iso: (typeof it.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(it.date)) ? it.date : '' });
-    });
-    if(!clean.length) return;
-    var list = document.getElementById('newsList'), more = document.getElementById('newsMore'), SHOW = 6, tones = ['t1','t2','t3','t4','t5','t6'];
-    while(list.firstChild) list.removeChild(list.firstChild);
-    clean.forEach(function(n, i){
-      var a = document.createElement('article'); a.className = 'newscard ' + tones[i % tones.length]; if(i >= SHOW) a.hidden = true;
-      if(n.date){ var t = document.createElement('time'); if(n.iso) t.setAttribute('datetime', n.iso); t.textContent = n.date; a.appendChild(t); }
-      var h = document.createElement('h3'); h.textContent = n.title; a.appendChild(h);
-      if(n.summary){ var p = document.createElement('p'); p.textContent = n.summary; a.appendChild(p); }
-      if(n.source || n.link){
-        var f = document.createElement('div'); f.className = 'src';
-        if(n.source){ f.appendChild(document.createTextNode('Source: ' + n.source)); }
-        if(n.link){ if(n.source) f.appendChild(document.createTextNode(' · ')); var l = document.createElement('a'); l.className = 'read'; l.href = n.link; l.target = '_blank'; l.rel = 'noopener noreferrer'; l.textContent = 'Read the official source'; f.appendChild(l); }
-        a.appendChild(f);
-      }
-      list.appendChild(a);
-    });
-    if(clean.length > SHOW){ more.hidden = false; more.onclick = function(){ Array.prototype.slice.call(list.children).forEach(function(c){ c.hidden = false; }); more.hidden = true; }; } else { more.hidden = true; }
-    document.getElementById('news').hidden = false; document.getElementById('navNews').hidden = false;
-  }
-  try{
-    var c2 = new AbortController(), t2 = setTimeout(function(){ c2.abort(); }, 6000);
-    fetch(SITE.newsUrl, { signal: c2.signal }).then(function(r){ return r.json(); }).then(function(d){ clearTimeout(t2); if(d && Array.isArray(d.items)) renderNews(d.items); }).catch(function(){ clearTimeout(t2); });
-  }catch(e){}
-
-  var toggle = document.getElementById('navToggle'), menu = document.getElementById('menu');
-  function setMenu(open){ menu.classList.toggle('open', open); toggle.setAttribute('aria-expanded', open ? 'true' : 'false'); }
-  toggle.addEventListener('click', function(){ setMenu(!menu.classList.contains('open')); });
-  menu.addEventListener('click', function(e){ if(e.target && e.target.closest && e.target.closest('a')) setMenu(false); });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && menu.classList.contains('open')){ setMenu(false); toggle.focus(); } });
-
-  /* gentle fade-in while scrolling. If anything goes wrong, everything is simply shown. */
-  var items = all('.reveal');
-  function showAll(){ items.forEach(function(el){ el.classList.add('in'); }); }
-  if('IntersectionObserver' in window){
-    var io = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } }); }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-    items.forEach(function(el){ io.observe(el); });
-    setTimeout(showAll, 4000);
-  } else { showAll(); }
-})();
-</script>
+<script src="site.js"></script>
 </body>
 </html>
