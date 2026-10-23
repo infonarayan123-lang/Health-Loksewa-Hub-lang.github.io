@@ -464,6 +464,136 @@
   }
   var qotdP = null;
   function getQotd(){ if(!qotdP) qotdP = getJSON('questionOfDay', 9000).then(cleanQotd); return qotdP; }
+  /* ---------- sharing the question of the day (text links, the phone's share sheet, copy, and a picture card) ----------
+     Nothing is sent anywhere until the visitor taps a button; the answer is never included. */
+  function qShareUrl(){ try{ return new URL('question-of-the-day.html', location.href).href; }catch(e){ return location.href.split('#')[0]; } }
+  function qShareBody(q){
+    var L = ['Question of the day | Health Loksewa', '', q.q, ''];
+    ['A', 'B', 'C', 'D'].forEach(function(l, i){ if(q.opts[i]) L.push(l + '. ' + q.opts[i]); });
+    return L.join('\n');
+  }
+  function qShareFull(q, url){ return qShareBody(q) + '\n\nDo you know the answer? Try it here: ' + url; }
+  function qShortText(q){ var s = 'Question of the day: ' + q.q; return s.length > 200 ? s.slice(0, 197).replace(/\s+\S*$/, '') + '...' : s; }
+  function qWrap(ctx, text, maxW){
+    var words = String(text).split(/\s+/).filter(Boolean), lines = [], cur = '';
+    words.forEach(function(w){
+      while(ctx.measureText(w).width > maxW){
+        var i = w.length; while(i > 1 && ctx.measureText(w.slice(0, i)).width > maxW) i--;
+        if(cur){ lines.push(cur); cur = ''; }
+        lines.push(w.slice(0, i)); w = w.slice(i);
+      }
+      if(!w) return;
+      var t = cur ? cur + ' ' + w : w;
+      if(ctx.measureText(t).width <= maxW) cur = t; else { lines.push(cur); cur = w; }
+    });
+    if(cur) lines.push(cur);
+    return lines;
+  }
+  /* the picture card (saved as a JPEG: about 10 times smaller than a PNG): 1080 px wide, as tall as the text needs (at least 1080, at most about 3800) */
+  function qCard(q){
+    var W = 1080, PAD = 72, IN = W - PAD * 2, FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", sans-serif';
+    function layout(scale){
+      var c = document.createElement('canvas'); c.width = W; c.height = 10; var x = c.getContext('2d'), y = PAD;
+      var P = { scale: scale, head: y }; y += 120 * scale;
+      var sz = { eyebrow: 30 * scale, q: 58 * scale, opt: 40 * scale, foot1: 44 * scale, foot2: 34 * scale };
+      P.eyebrowY = y; y += 56 * scale;
+      if(q.subject){ x.font = '700 ' + (32 * scale) + 'px ' + FONT; P.subj = qWrap(x, q.subject, IN).slice(0, 2); P.subjY = y; y += P.subj.length * 42 * scale + 10 * scale; }
+      x.font = '800 ' + sz.q + 'px ' + FONT; P.ql = qWrap(x, q.q, IN); P.qY = y; y += P.ql.length * sz.q * 1.3 + 44 * scale;
+      x.font = '600 ' + sz.opt + 'px ' + FONT; P.opts = [];
+      ['A', 'B', 'C', 'D'].forEach(function(l, i){
+        if(!q.opts[i]) return;
+        var lines = qWrap(x, q.opts[i], IN - 150 * scale), h = Math.max(96 * scale, lines.length * sz.opt * 1.3 + 44 * scale);
+        P.opts.push({ l: l, lines: lines, y: y, h: h }); y += h + 22 * scale;
+      });
+      y += 30 * scale; P.footY = y; y += 190 * scale; P.H = Math.max(1080, Math.ceil(y + PAD * 0.4)); P.sz = sz;
+      return P;
+    }
+    var scale = 1, P = layout(scale);
+    while(P.H > 3800 && scale > 0.45){ scale -= 0.1; P = layout(scale); }
+    var cv = document.createElement('canvas'); cv.width = W; cv.height = Math.min(P.H, 4000); var c = cv.getContext('2d');
+    var g = c.createLinearGradient(0, 0, W, cv.height); g.addColorStop(0, '#0B1220'); g.addColorStop(0.55, '#1B1745'); g.addColorStop(1, '#312E81'); c.fillStyle = g; c.fillRect(0, 0, W, cv.height);
+    c.globalAlpha = 0.18; c.fillStyle = '#2DD4BF'; c.beginPath(); c.arc(W - 120, 120, 320, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+    /* brand */
+    var s = scale, bx = PAD, by = PAD;
+    c.fillStyle = '#2DD4BF'; c.beginPath(); if(c.roundRect) c.roundRect(bx, by, 84 * s, 84 * s, 22 * s); else c.rect(bx, by, 84 * s, 84 * s); c.fill();
+    c.fillStyle = '#0B1220'; c.fillRect(bx + 34 * s, by + 18 * s, 16 * s, 48 * s); c.fillRect(bx + 18 * s, by + 34 * s, 48 * s, 16 * s);
+    c.fillStyle = '#FFFFFF'; c.textBaseline = 'top'; c.font = '800 ' + 46 * s + 'px ' + FONT; c.fillText('Health Loksewa', bx + 108 * s, by + 18 * s);
+    c.textAlign = 'right'; c.fillStyle = '#C7D2FE'; c.font = '600 ' + 30 * s + 'px ' + FONT;
+    var d = new Date(); c.fillText(d.getDate() + ' ' + HD_MONTHS[d.getMonth()] + ' ' + d.getFullYear(), W - PAD, by + 26 * s); c.textAlign = 'left';
+    c.fillStyle = '#5EEAD4'; c.font = '800 ' + P.sz.eyebrow + 'px ' + FONT; c.fillText('Q U E S T I O N   O F   T H E   D A Y', PAD, P.eyebrowY);
+    if(P.subj){ c.fillStyle = '#FDE68A'; c.font = '700 ' + 32 * s + 'px ' + FONT; P.subj.forEach(function(t, i){ c.fillText(t, PAD, P.subjY + i * 42 * s); }); }
+    c.fillStyle = '#FFFFFF'; c.font = '800 ' + P.sz.q + 'px ' + FONT; P.ql.forEach(function(t, i){ c.fillText(t, PAD, P.qY + i * P.sz.q * 1.3); });
+    P.opts.forEach(function(o){
+      c.fillStyle = 'rgba(255,255,255,0.12)'; c.beginPath(); if(c.roundRect) c.roundRect(PAD, o.y, IN, o.h, 26 * s); else c.rect(PAD, o.y, IN, o.h); c.fill();
+      c.fillStyle = '#2DD4BF'; c.beginPath(); c.arc(PAD + 56 * s, o.y + o.h / 2, 32 * s, 0, Math.PI * 2); c.fill();
+      c.fillStyle = '#0B1220'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = '800 ' + 36 * s + 'px ' + FONT; c.fillText(o.l, PAD + 56 * s, o.y + o.h / 2 + 2 * s); c.textAlign = 'left'; c.textBaseline = 'top';
+      var th = o.lines.length * P.sz.opt * 1.3, ty = o.y + (o.h - th) / 2 + 2 * s;
+      c.fillStyle = '#FFFFFF'; c.font = '600 ' + P.sz.opt + 'px ' + FONT; o.lines.forEach(function(t, i){ c.fillText(t, PAD + 120 * s, ty + i * P.sz.opt * 1.3); });
+    });
+    c.fillStyle = 'rgba(255,255,255,0.25)'; c.fillRect(PAD, P.footY, IN, 3);
+    c.fillStyle = '#FFFFFF'; c.font = '800 ' + P.sz.foot1 + 'px ' + FONT; c.fillText('Do you know the answer?', PAD, P.footY + 34 * s);
+    c.fillStyle = '#C7D2FE'; c.font = '600 ' + P.sz.foot2 + 'px ' + FONT; c.fillText('Try it free in the Health Loksewa app', PAD, P.footY + 96 * s);
+    if(location.host){ c.fillStyle = '#5EEAD4'; c.font = '700 ' + 30 * s + 'px ' + FONT; c.fillText(location.host, PAD, P.footY + 144 * s); }
+    return cv;
+  }
+  function qToBlob(cv, cb){
+    try{ if(cv.toBlob){ cv.toBlob(function(b){ cb(b); }, 'image/jpeg', 0.92); return; } }catch(e){}
+    try{
+      var u = cv.toDataURL('image/jpeg', 0.92), bin = atob(u.split(',')[1]), arr = new Uint8Array(bin.length); for(var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      cb(new Blob([arr], { type: 'image/jpeg' }));
+    }catch(e){ cb(null); }
+  }
+  function qSave(blob){
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'question-of-the-day.jpg'; a.style.display = 'none'; document.body.appendChild(a); a.click();
+    setTimeout(function(){ try{ URL.revokeObjectURL(a.href); }catch(e){} if(a.parentNode) a.parentNode.removeChild(a); }, 1500);
+  }
+  function qCopy(text, done){
+    var fallback = function(){
+      try{ var t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); var ok = document.execCommand && document.execCommand('copy'); document.body.removeChild(t); done(!!ok); }catch(e){ done(false); }
+    };
+    try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback); return; } }catch(e){}
+    fallback();
+  }
+  function buildShare(q){
+    var url = qShareUrl(), full = qShareFull(q, url), box = el('div', 'sharebox'), row = el('div', 'sharerow'), msg = el('p', 'sharemsg');
+    msg.setAttribute('aria-live', 'polite');
+    box.appendChild(el('p', 'sharetitle', 'Share this question'));
+    var say = function(t){ msg.textContent = t; };
+    if(navigator.share){
+      var nb = el('button', 'btn btn-primary', 'Share'); nb.type = 'button'; nb.id = 'shNative';
+      nb.addEventListener('click', function(){ try{ navigator.share({ title: 'Question of the day', text: qShareBody(q), url: url }).catch(function(){}); }catch(e){} });
+      row.appendChild(nb);
+    }
+    [['WhatsApp', 'https://wa.me/?text=' + encodeURIComponent(full)],
+     ['Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url)],
+     ['Telegram', 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(qShareBody(q))],
+     ['X', 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(qShortText(q)) + '&url=' + encodeURIComponent(url)],
+     ['Email', 'mailto:?subject=' + encodeURIComponent('Question of the day | Health Loksewa') + '&body=' + encodeURIComponent(full)]
+    ].forEach(function(p){
+      var a = el('a', 'btn btn-ghost', p[0]); a.href = p[1]; a.setAttribute('data-share', p[0].toLowerCase());
+      if(p[0] !== 'Email'){ a.target = '_blank'; a.rel = 'noopener noreferrer'; a.setAttribute('aria-label', 'Share on ' + p[0] + ' (opens in a new tab)'); }
+      row.appendChild(a);
+    });
+    var cp = el('button', 'btn btn-ghost', 'Copy text'); cp.type = 'button'; cp.id = 'shCopy';
+    cp.addEventListener('click', function(){ qCopy(full, function(ok){ say(ok ? 'Copied. Now paste it anywhere.' : 'Could not copy on this device. Please use another button.'); }); });
+    row.appendChild(cp);
+    var pb = el('button', 'btn btn-ghost', 'Share as picture'); pb.type = 'button'; pb.id = 'shPic';
+    pb.addEventListener('click', function(){
+      say('Making the picture...');
+      var cv; try{ cv = qCard(q); }catch(e){ say('Could not make the picture on this device. Please use another button.'); return; }
+      qToBlob(cv, function(blob){
+        if(!blob){ say('Could not make the picture on this device. Please use another button.'); return; }
+        var file = null; try{ file = new File([blob], 'question-of-the-day.jpg', { type: 'image/jpeg' }); }catch(e){}
+        if(file && navigator.canShare && navigator.share && navigator.canShare({ files: [file] })){
+          navigator.share({ files: [file], title: 'Question of the day', text: 'Question of the day | Health Loksewa' }).then(function(){ say(''); }, function(err){ if(err && err.name === 'AbortError') say(''); else { qSave(blob); say('The picture was saved. Now post it anywhere.'); } });
+        } else { qSave(blob); say('The picture was saved to your device. Now post it anywhere.'); }
+      });
+    });
+    row.appendChild(pb); box.appendChild(row); box.appendChild(msg);
+    box.appendChild(el('p', 'sharenote', 'Tip: on Facebook, Instagram and TikTok the picture works best.'));
+    return box;
+  }
+
   function drawQotd(box, q){
     clear(box);
     if(q.subject) box.appendChild(el('p', 'qsubject', q.subject));
@@ -488,6 +618,7 @@
       btns.push(b); list.appendChild(b);
     });
     box.appendChild(list); box.appendChild(res);
+    box.appendChild(buildShare(q));
   }
   all('[data-qotd]').forEach(function(box){
     var sec = box.closest ? box.closest('section') : null, started = false;
