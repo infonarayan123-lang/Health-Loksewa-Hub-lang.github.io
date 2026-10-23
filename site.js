@@ -20,14 +20,51 @@
   function clear(node){ while(node.firstChild) node.removeChild(node.firstChild); }
   function isoDate(d){ return (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) ? d : ''; }
   function niceDate(d){ d = isoDate(d); if(!d) return ''; var p = d.split('-'), m = +p[1]; return (m >= 1 && m <= 12) ? (+p[2]) + ' ' + MONTHS[m - 1] + ' ' + p[0] : ''; }
-  function getJSON(action, ms){
+  /* ---------- loading data from the Google Sheet backend: fast and honest ----------
+     1. The last good answer is remembered in this phone's browser (public data only: news, links, documents, packs, health days, holidays, FAQs, testimonials, company, settings).
+     2. A page waits at most 2.5 seconds for the Sheet; if it is slower and a remembered answer exists, the remembered one is shown at once, and the new answer is saved for next time.
+     3. If the Sheet does not answer, it is asked ONE more time at once (the first request often only wakes it up).
+     4. If it still fails and nothing is remembered, the page says so clearly and offers "Try again" (it never says "coming soon" for a failure). ---------- */
+  var netFail = Object.create(null);
+  var CACHE_RE = /^(siteNews|siteLinks|siteDocuments|siteProducts|siteHealthDays|sitePublicHolidays|siteFaqs|siteTestimonials|siteCompany|appSettings)(&|$)/;
+  function cacheGet(action){
+    var m = CACHE_RE.exec(action); if(!m) return null;
+    try{ var o = JSON.parse(localStorage.getItem('hl:c:' + action)), age = Date.now() - o.t, max = (m[1] === 'siteNews' ? 3 : 24) * 3600000; if(o && typeof o.t === 'number' && o.d && typeof o.d === 'object' && age >= 0 && age < max) return o; }catch(e){}
+    return null;
+  }
+  function cachePut(action, d){
+    if(!CACHE_RE.test(action) || !d || typeof d !== 'object' || d.error) return;
+    try{ localStorage.setItem('hl:c:' + action, JSON.stringify({ t: Date.now(), d: d })); }catch(e){}
+  }
+  function fetchOnce(action, ms){
     return new Promise(function(resolve){
       try{
-        var c = new AbortController(), t = setTimeout(function(){ c.abort(); }, ms || 6000);
+        var c = new AbortController(), t = setTimeout(function(){ c.abort(); }, ms);
         fetch(SITE.api + '?action=' + action, { signal: c.signal }).then(function(r){ return r.json(); }).then(function(d){ clearTimeout(t); resolve(d); }).catch(function(){ clearTimeout(t); resolve(null); });
       }catch(e){ resolve(null); }
     });
   }
+  function getJSON(action, ms){
+    var per = Math.min(ms || 7000, 9000), cached = cacheGet(action);
+    return new Promise(function(resolve){
+      var done = false, finish = function(d){ if(done) return; done = true; resolve(d); };
+      fetchOnce(action, per).then(function(d){ return d || fetchOnce(action, per); }).then(function(d){
+        if(d) cachePut(action, d); else if(!done) netFail[action] = true;
+        finish(d);
+      });
+      if(cached) setTimeout(function(){ finish(cached.d); }, 2500);
+    });
+  }
+  function failNote(box, actions){
+    if(!box || !actions.some(function(a){ return netFail[a]; })) return false;
+    clear(box); box.appendChild(el('b', 'neterr', 'We could not load this right now.'));
+    box.appendChild(document.createTextNode('Please check your internet connection and try again.'));
+    var b = el('button', 'btn btn-ghost', 'Try again'); b.type = 'button'; b.addEventListener('click', function(){ location.reload(); }); box.appendChild(document.createElement('br')); box.appendChild(b);
+    return true;
+  }
+  function showNone(box, actions){ failNote(box, actions); if(box) box.hidden = false; }
+  /* patient wording: after 4 seconds a "Loading..." line explains the first visit can be slow */
+  setTimeout(function(){ all('.empty').forEach(function(n){ if(!n.hidden && /^Loading/.test(n.textContent) && n.textContent.indexOf('few seconds') === -1) n.textContent = n.textContent.replace(/\.*$/, '') + '... still loading. The first visit can take a few seconds.'; }); }, 4000);
 
   /* ---------- built-in official links (used until the Site Links tab has rows). Please check each one opens. ---------- */
   var DEFAULT_LINKS = [
@@ -72,7 +109,13 @@
   ].map(function(r){ return { category: r[0], title: r[1], link: r[2], note: r[3] }; });
 
   /* ---------- common parts of every page ---------- */
-  all('[data-app]').forEach(function(a){ var u = https(SITE.appUrl); if(u) a.setAttribute('href', u); });
+  /* every "open the app" link goes to the app; data-go (a short lowercase word from a fixed list inside the app) makes the app open at that screen */
+  all('[data-app]').forEach(function(a){
+    var u = https(SITE.appUrl); if(!u) return;
+    var g = a.getAttribute('data-go'), ex = a.getAttribute('data-exam'), q = '';
+    if(g && /^[a-z]{2,12}$/.test(g)){ q = '?go=' + g; if(g === 'exam' && ex && /^[a-z][a-z0-9_]{1,19}$/.test(ex)) q += '&exam=' + ex; }   /* exam = a plain exam key such as pho or ha_license */
+    a.setAttribute('href', u + q);
+  });
   all('[data-legal]').forEach(function(a){ var base = https(SITE.legalUrl); if(base) a.setAttribute('href', base + a.getAttribute('data-legal')); });
   var yr = document.getElementById('year'); if(yr) yr.textContent = String(new Date().getFullYear());
 
@@ -198,7 +241,7 @@
       clear(nList);
       list.slice(0, state.shown).forEach(function(n, i){ nList.appendChild(newsCard(n, CAT_TONE[n.category] || TONES[i % TONES.length], true)); });
       nMore.hidden = list.length <= state.shown;
-      nEmpty.hidden = list.length > 0;
+      nEmpty.hidden = list.length > 0; if(!nEmpty.hidden && !state.all.length) failNote(nEmpty, ['siteNews']);
       document.getElementById('newsCount').textContent = list.length ? (list.length + (list.length === 1 ? ' item' : ' items')) : '';
     };
     all('.fchip', newsPage).forEach(function(b){ b.addEventListener('click', function(){ state.cat = b.getAttribute('data-cat'); state.shown = 12; all('.fchip', newsPage).forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); draw(); }); });
@@ -364,7 +407,7 @@
     libMore.addEventListener('click', function(){ libState.shown += 30; libDraw(); });
     getDocs().then(function(docs){
       libAll = docs; libLoading.hidden = true;
-      if(!docs.length){ libNone.hidden = false; return; }
+      if(!docs.length){ showNone(libNone, ['siteDocuments']); return; }
       var secs = [], seen = Object.create(null), letters = [], lseen = Object.create(null);
       docs.forEach(function(d){ if(!(d.section in seen)){ seen[d.section] = 1; secs.push(d.section); } var l = firstLetter(d.title); if(!(l in lseen)){ lseen[l] = 1; letters.push(l); } });
       letters.sort(function(a, b){ return a === '#' ? 1 : b === '#' ? -1 : (a < b ? -1 : 1); });
@@ -565,7 +608,7 @@
     hMore.addEventListener('click', function(){ hS.shown += 30; hDraw(); });
     getJSON('siteHealthDays', 9000).then(function(d){
       hAll = cleanDays(d && d.days); hLoading.hidden = true;
-      if(!hAll.length){ hNone.hidden = false; return; }
+      if(!hAll.length){ showNone(hNone, ['siteHealthDays']); return; }
       var months = [], seen = Object.create(null), cats = [], cseen = Object.create(null), anyExam = false;
       hAll.forEach(function(x){ if(!(x.month in seen)){ seen[x.month] = 1; months.push(x.month); } if(x.category && !(x.category in cseen)){ cseen[x.category] = 1; cats.push(x.category); } if(x.examRelevant) anyExam = true; });
       var mi = [{ label: 'All months', value: -1 }].concat(months.map(function(m){ return { label: m ? HD_MONTHS[m - 1] : 'Date varies', value: m }; }));
@@ -614,7 +657,7 @@
     oUp.addEventListener('click', function(){ oS.upcoming = !oS.upcoming; oUp.setAttribute('aria-pressed', oS.upcoming ? 'true' : 'false'); oDraw(); });
     getJSON('sitePublicHolidays', 9000).then(function(d){
       oAll = cleanHol(d && d.holidays); oLoading.hidden = true;
-      if(!oAll.length){ oNone.hidden = false; return; }
+      if(!oAll.length){ showNone(oNone, ['sitePublicHolidays']); return; }
       var years = [], ys = Object.create(null); oAll.forEach(function(h){ var y = +h.date.slice(0, 4); if(!(y in ys)){ ys[y] = 1; years.push(y); } }); years.sort(function(a, b){ return a - b; });
       var cur = nowD.getFullYear(); oS.year = years.indexOf(cur) !== -1 ? cur : (years.filter(function(y){ return y > cur; })[0] || years[years.length - 1]);
       var hasUpcoming = function(){ return oAll.some(function(h){ return +h.date.slice(0, 4) === oS.year && h.date >= todayS; }); };
@@ -674,7 +717,7 @@
     pkMore.addEventListener('click', function(){ pkS.shown += 24; pkDraw(); });
     getJSON('siteProducts', 9000).then(function(d){
       pkAll = cleanPacks(d && d.products); pkLoading.hidden = true;
-      if(!pkAll.length){ pkNone.hidden = false; return; }
+      if(!pkAll.length){ showNone(pkNone, ['siteProducts']); return; }
       var types = [], tseen = Object.create(null), exams = [], eseen = Object.create(null);
       pkAll.forEach(function(p){ if(!(p.type in tseen)){ tseen[p.type] = 1; types.push(p.type); } if(p.exam && !(p.exam in eseen)){ eseen[p.exam] = 1; exams.push(p.exam); } });
       types.sort(function(a, b){ return PK_TYPES.indexOf(a) - PK_TYPES.indexOf(b); });
@@ -713,7 +756,7 @@
     fMore.addEventListener('click', function(){ fS.shown += 30; fDraw(); });
     getJSON('siteFaqs', 9000).then(function(d){
       fAll = cleanFaqs(d && d.faqs); fLoading.hidden = true;
-      if(!fAll.length){ fNone.hidden = false; return; }
+      if(!fAll.length){ showNone(fNone, ['siteFaqs']); return; }
       var cats = [], seen = Object.create(null); fAll.forEach(function(f){ if(f.cat && !(f.cat in seen) && cats.length < 12){ seen[f.cat] = 1; cats.push(f.cat); } });
       if(cats.length > 1){
         clear(fCats);
@@ -878,5 +921,5 @@
     return { lines: L };
   });
 
-  window.HLSite = { SITE: SITE, https: https, email: email, txt: txt, niceDate: niceDate, DEFAULT_LINKS: DEFAULT_LINKS, cleanNews: cleanNews, cleanLinks: cleanLinks, cleanDocs: cleanDocs, cleanQotd: cleanQotd, calc: CALC };
+  window.HLSite = { SITE: SITE, https: https, email: email, txt: txt, niceDate: niceDate, DEFAULT_LINKS: DEFAULT_LINKS, cleanNews: cleanNews, cleanLinks: cleanLinks, cleanDocs: cleanDocs, cleanQotd: cleanQotd, calc: CALC, netFail: netFail };
 })();

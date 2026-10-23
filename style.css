@@ -434,3 +434,32 @@ nav.main a{padding:0 10px}
 /* more calculators */
 .field select{width:100%;min-height:48px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:1rem}
 .result .small{overflow-wrap:anywhere}
+
+/* load failure message, extra links in the phone menu */
+.neterr{display:block;color:var(--ink);margin-bottom:6px}
+.empty .btn{margin-top:12px}
+nav.main li.more{display:none}
+@media (max-width:1260px){nav.main li.more{display:list-item}nav.main li.more a{color:var(--ink2);font-weight:600}nav.main li.more.first{border-top:1px solid var(--line);margin-top:6px;padding-top:6px}}
+
+/* the four Home rows are links; Hamro Patro box */
+a.stat{color:inherit;text-decoration:none;cursor:pointer;min-height:64px}
+a.stat::after{content:"\203A";margin-left:auto;color:var(--muted);font-size:1.6rem;line-height:1}
+a.stat:hover{background:var(--panel2)}
+a.stat:focus-visible{outline:3px solid var(--c-teal);outline-offset:-3px}
+.hpbox{margin-top:22px;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.hpbox p{margin:0 0 12px;color:var(--ink2)}
+.hpbox p b{color:var(--ink)}
+
+/* the band, exam cards and feature cards are links to the app */
+.marq a{flex:none;color:inherit;text-decoration:none;font-size:clamp(1.15rem,2.6vw,1.7rem);font-weight:900;letter-spacing:-.01em;padding:0 22px;white-space:nowrap}
+.marq a::after{content:"\2726";margin-left:44px;color:#FDE68A}
+.marq a:hover{text-decoration:underline}
+.marq:hover .track,.marq:focus-within .track{animation-play-state:paused}
+.marq a:focus-visible{outline:3px solid #fff;outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion: reduce){.marq a:nth-child(n+9){display:none}}
+a.excard{color:inherit;text-decoration:none}
+a.excard::after{content:"\203A";margin-left:auto;color:var(--muted);font-size:1.5rem;line-height:1}
+a.excard:focus-visible{outline:3px solid var(--c-teal);outline-offset:2px}
+.bento a.card{color:inherit;text-decoration:none;display:block}
+.bento .card .go{display:inline-block;margin-top:12px;font-weight:800;color:inherit;text-decoration:underline}
+.bento a.card:focus-visible{outline:3px solid #fff;outline-offset:2px}
