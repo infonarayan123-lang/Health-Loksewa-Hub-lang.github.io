@@ -197,7 +197,8 @@
     }
     a.appendChild(el('h3', null, n.title));
     var ci = closingInfo(n);
-    if(n.tag || ci){ var pills = el('div', 'pills'); if(n.tag) pills.appendChild(el('span', 'xpill', n.tag)); if(ci) pills.appendChild(el('span', 'xpill cstate ' + ci.cls, ci.text)); a.appendChild(pills); }
+    var fresh = isRecent(n.iso);
+    if(n.tag || ci || fresh){ var pills = el('div', 'pills'); if(fresh) pills.appendChild(el('span', 'xpill newpill', 'New')); if(n.tag) pills.appendChild(el('span', 'xpill', n.tag)); if(ci) pills.appendChild(el('span', 'xpill cstate ' + ci.cls, ci.text)); a.appendChild(pills); }
     if(n.summary) a.appendChild(el('p', null, n.summary));
     if(n.source || n.link){
       var f = el('div', 'src');
@@ -373,6 +374,7 @@
   function getDocs(){ if(!docsP) docsP = getJSON('siteDocuments', 8000).then(function(d){ return cleanDocs(d && d.docs); }); return docsP; }
   function docRow(d, showWhere){
     var li = el('li', 'docitem'), a = el('a', 'dtitle', d.title); a.href = d.link; a.target = '_blank'; a.rel = 'noopener noreferrer'; li.appendChild(a);
+    if(isRecent(d.date)) li.appendChild(el('span', 'xpill newpill', 'New'));
     var bits = [];
     if(showWhere){ var where = [d.section, d.group, d.subgroup].filter(Boolean).join(' \u203A '); if(where) bits.push(where); }
     var nd = niceDate(d.date); if(nd) bits.push(nd);
@@ -1059,5 +1061,60 @@
     return { lines: L };
   });
 
-  window.HLSite = { SITE: SITE, https: https, email: email, txt: txt, niceDate: niceDate, DEFAULT_LINKS: DEFAULT_LINKS, cleanNews: cleanNews, cleanLinks: cleanLinks, cleanDocs: cleanDocs, cleanQotd: cleanQotd, calc: CALC, netFail: netFail };
+  /* press / (a slash) on any page to search: on the search page it jumps into the search box; anywhere else it opens the search page. Never while typing in a field. */
+  document.addEventListener('keydown', function(e){
+    if(e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+    var a = document.activeElement, tag = a && a.tagName ? a.tagName : '';
+    if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (a && a.isContentEditable)) return;
+    e.preventDefault();
+    var si = document.getElementById('sInput'); if(si){ si.focus(); } else { location.href = 'search.html'; }
+  });
+
+  /* ---------- 'New' badge (a date from today back to 7 days ago), exam pages, text size ---------- */
+  function isRecent(iso){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ''))) return false;
+    var p = iso.split('-'), d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])), t = new Date(); t.setHours(0, 0, 0, 0);
+    var diff = Math.round((t.getTime() - d.getTime()) / 86400000); return diff >= 0 && diff <= 7;
+  }
+  var exPacks = document.getElementById('exPacks');
+  if(exPacks){
+    var exNames = String(exPacks.getAttribute('data-exam-names') || '').toLowerCase().split('|').filter(Boolean), exSec = document.getElementById('exPacksSec');
+    getJSON('siteProducts', 9000).then(function(d){
+      var out = [];
+      (d && Array.isArray(d.products) ? d.products : []).slice(0, 150).forEach(function(it){
+        if(out.length >= 12 || !it || typeof it !== 'object') return;
+        var name = stripTags(it.name, 100), exam = stripTags(it.exam, 40).toLowerCase(); if(!name || exNames.indexOf(exam) === -1) return;
+        out.push({ name: name, type: ['Mock test', 'eBook', 'Course', 'Notes', 'Video'].indexOf(it.type) !== -1 ? it.type : 'Other', description: stripTags(it.description, 300), access: (it.access === 'Free' || it.access === 'Premium') ? it.access : '', link: https(it.link) });
+      });
+      if(!out.length) return;
+      clear(exPacks);
+      out.forEach(function(p){
+        var li = el('li', 'pack'), tags = el('div', 'tags'); tags.appendChild(el('span', 'xpill', p.type)); li.appendChild(tags);
+        li.appendChild(el('h3', null, p.name)); if(p.description) li.appendChild(el('p', null, p.description));
+        var foot = el('div', 'foot'); if(p.access) foot.appendChild(el('b', 'access', p.access === 'Free' ? 'Free to start' : 'Premium'));
+        var a = el('a', 'btn btn-primary', p.link ? 'Learn more' : 'Open in the app'), url = p.link || https(SITE.appUrl);
+        if(url){ a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } foot.appendChild(a); li.appendChild(foot); exPacks.appendChild(li);
+      });
+      exSec.hidden = false;
+    });
+  }
+  /* text size: three steps, remembered in this browser only */
+  (function(){
+    var KEY = 'hl:fs', SIZES = [100, 115, 130], LABELS = ['Normal text', 'Large text', 'Larger text'], SHORT = ['A', 'A+', 'A++'], cur = 100;
+    try{ var v = Number(localStorage.getItem(KEY)); if(SIZES.indexOf(v) !== -1) cur = v; }catch(e){}
+    document.documentElement.style.fontSize = cur + '%';
+    var foot = document.querySelector('footer .wrap'); if(!foot) return;
+    var box = el('div', 'textsize'); box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Text size'); box.appendChild(el('span', null, 'Text size'));
+    SIZES.forEach(function(sz, i){
+      var b = el('button', 'tsbtn', SHORT[i]); b.type = 'button'; b.setAttribute('aria-label', LABELS[i]); b.setAttribute('aria-pressed', sz === cur ? 'true' : 'false'); b.setAttribute('data-size', String(sz));
+      b.addEventListener('click', function(){
+        cur = sz; document.documentElement.style.fontSize = cur + '%'; try{ localStorage.setItem(KEY, String(cur)); }catch(e){}
+        all('.tsbtn').forEach(function(x){ x.setAttribute('aria-pressed', Number(x.getAttribute('data-size')) === cur ? 'true' : 'false'); });
+      });
+      box.appendChild(b);
+    });
+    var disc = foot.querySelector('.disc'); if(disc) foot.insertBefore(box, disc); else foot.appendChild(box);
+  })();
+
+  window.HLSite = { SITE: SITE, https: https, email: email, txt: txt, niceDate: niceDate, DEFAULT_LINKS: DEFAULT_LINKS, cleanNews: cleanNews, cleanLinks: cleanLinks, cleanDocs: cleanDocs, cleanQotd: cleanQotd, calc: CALC, netFail: netFail, u: { el: el, clear: clear, all: all, txt: txt, stripTags: stripTags, isoDate: isoDate, niceDate: niceDate, https: https, getJSON: getJSON, getNews: getNews, getDocs: getDocs, cleanNews: cleanNews, cleanDocs: cleanDocs } };
 })();

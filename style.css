@@ -464,6 +464,52 @@ a.excard:focus-visible{outline:3px solid var(--c-teal);outline-offset:2px}
 .bento .card .go{display:inline-block;margin-top:12px;font-weight:800;color:inherit;text-decoration:underline}
 .bento a.card:focus-visible{outline:3px solid #fff;outline-offset:2px}
 
+/* site search */
+.sgrp{margin:0 0 26px}
+.sgrp h3{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;font-size:1.15rem;margin-bottom:10px}
+.sgrp h3 .n{font-size:.8rem;color:var(--muted);font-weight:700}
+.slist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.slist li{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.slist a{font-weight:800;color:var(--ink);text-decoration:none;overflow-wrap:anywhere}
+.slist a:hover{text-decoration:underline}
+.slist p{margin:4px 0 0;color:var(--ink2);font-size:.95rem;overflow-wrap:anywhere}
+.slist .smeta{display:block;margin-top:6px;color:var(--muted);font-size:.82rem;font-weight:700;overflow-wrap:anywhere}
+.slist mark{background:#FDE68A;color:#1F2937;border-radius:3px;padding:0 2px}
+.sstate{color:var(--ink2);margin:0 0 14px}
+#sChips .fchip{margin:4px 6px 0 0}
+/* study planner */
+fieldset.plsubj{border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 16px;min-width:0}
+fieldset.plsubj legend{font-weight:800;padding:0 6px}
+.plrow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.plrow .nm{flex:1 1 100%;min-height:48px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:1rem}
+.plrow .wt{flex:1 1 150px;min-height:48px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:1rem}
+.plrow .rm{flex:0 0 48px;min-height:48px;padding:0;font-size:1.4rem;line-height:1}
+.plsum{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:6px 0 18px}
+@media (min-width:600px){.plsum{grid-template-columns:repeat(4,1fr)}}
+.plsum div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.plsum b{display:block;font-size:1.6rem;color:var(--ink)}
+.plsum span{color:var(--ink2);font-size:.85rem}
+.plh{font-size:1.15rem;margin:18px 0 10px}
+.plsubj-list{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:10px}
+.plsubj-list li{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.plt{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px}
+.plt b{color:var(--ink);overflow-wrap:anywhere}
+.plt span{color:var(--ink2);font-weight:700}
+.plbar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:8px}
+.plbar i{display:block;height:100%;background:var(--c-teal)}
+.plday{display:flex;flex-wrap:wrap;gap:6px 12px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:8px}
+.plday b{min-width:96px;color:var(--ink)}
+.plday span{color:var(--ink2);overflow-wrap:anywhere}
+.plday.off{border-style:dashed}
+.plp{margin:12px 0 0;color:var(--ink2)}
+.plp b{color:var(--ink)}
+#plOut .plday b,#plOut .plt b{display:inline-block;font-size:1rem;margin:0}
+#plOut .plsum b{display:block;font-size:1.6rem;margin:0}
+#plOut .plp b{display:inline;font-size:inherit}
+.sgrp h3{margin-top:0}
+#sResults{margin-top:14px}
+@media print{header,footer,.noprint,.bandwrap{display:none!important}}
+
 /* sharing the question of the day */
 .sharebox{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
 .sharetitle{margin:0 0 12px;font-weight:800;color:var(--ink)}
@@ -475,3 +521,20 @@ a.excard:focus-visible{outline:3px solid var(--c-teal);outline-offset:2px}
 /* a label that looks like a button but is not a link (Android app: coming soon) */
 a.btn[aria-disabled="true"]:not([href]){cursor:default;border-style:dashed;box-shadow:none;transform:none}
 .sharenote .sharemistake{color:inherit;font-weight:700;text-decoration:underline;display:inline-block;padding:14px 8px;margin:-14px -8px}
+
+/* exam pages, New badge, text size */
+.subjects{display:flex;flex-wrap:wrap;gap:10px;list-style:none;margin:0;padding:0}
+.subjects li{padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--ink);font-weight:600}
+.reflinks{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.reflinks li{padding:14px 18px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.reflinks a{color:var(--ink);text-decoration:underline;display:inline-block;min-height:44px;line-height:44px}
+.reflinks span{display:block;color:var(--ink2);margin-top:-4px}
+.xpill.newpill{background:#BE123C;border-color:#BE123C;color:#fff}
+.docitem .xpill.newpill{margin-left:10px}
+.textsize{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0 4px;color:var(--ink2);font-weight:600}
+.tsbtn{min-width:44px;min-height:44px;padding:0 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-weight:800;cursor:pointer}
+.tsbtn[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.tsbtn:focus-visible{outline:3px solid var(--c-teal);outline-offset:2px}
+/* big text on small phones: the brand name may wrap, the Menu button keeps its size (found by the text size test) */
+.nav-toggle{flex:none}
+@media (max-width:520px){.bar{gap:10px}.brand{min-width:0}.brand span{min-width:0;white-space:normal;line-height:1.1}}
