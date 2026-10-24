@@ -3,6 +3,7 @@
   'use strict';
   /* ======= EASY SETTINGS: change these when you have your own domain ======= */
   var SITE = {
+    mail:     'healthloksewa026@gmail.com',   /* used by "Found a mistake? Tell us" under the shared question; the Contact page uses App Settings */
     appUrl:   'https://infonarayan123-lang.github.io/Health-loksewa-app/',   /* where "Open the app" goes */
     legalUrl: 'https://infonarayan123-lang.github.io/Health-loksewa-app/',   /* where privacy.html, terms.html ... live */
     apkUrl:   '',                                                            /* a direct link to the APK file, when you have one */
@@ -554,6 +555,8 @@
     try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback); return; } }catch(e){}
     fallback();
   }
+  /* the address for mistake reports: the Contact address from App Settings when this page shows it, otherwise the built-in one */
+  function qMistakeMail(){ var ml = document.getElementById('mailLink'), m = ml ? email(String(ml.getAttribute('href') || '').replace(/^mailto:/i, '')) : ''; return m || email(SITE.mail); }
   function buildShare(q){
     var url = qShareUrl(), full = qShareFull(q, url), box = el('div', 'sharebox'), row = el('div', 'sharerow'), msg = el('p', 'sharemsg');
     msg.setAttribute('aria-live', 'polite');
@@ -591,6 +594,10 @@
     });
     row.appendChild(pb); box.appendChild(row); box.appendChild(msg);
     box.appendChild(el('p', 'sharenote', 'Tip: on Facebook, Instagram and TikTok the picture works best.'));
+    var mp = el('p', 'sharenote'); mp.appendChild(document.createTextNode('Found a mistake in this question? '));
+    var ma = el('a', 'sharemistake', 'Tell us'); ma.href = 'mailto:' + qMistakeMail() + '?subject=' + encodeURIComponent('Mistake in a question | Health Loksewa') + '&body=' + encodeURIComponent(qShareBody(q) + '\n\nWhat is wrong:\n');
+    ma.addEventListener('click', function(){ ma.href = 'mailto:' + qMistakeMail() + '?subject=' + encodeURIComponent('Mistake in a question | Health Loksewa') + '&body=' + encodeURIComponent(qShareBody(q) + '\n\nWhat is wrong:\n'); });
+    mp.appendChild(ma); box.appendChild(mp);
     return box;
   }
 
