@@ -538,3 +538,14 @@ a.btn[aria-disabled="true"]:not([href]){cursor:default;border-style:dashed;box-s
 /* big text on small phones: the brand name may wrap, the Menu button keeps its size (found by the text size test) */
 .nav-toggle{flex:none}
 @media (max-width:520px){.bar{gap:10px}.brand{min-width:0}.brand span{min-width:0;white-space:normal;line-height:1.1}}
+
+/* Question of the day: green for the right answer, red for a wrong pick (a clear fill, with a mark in words and a symbol) */
+.qopt.right{border-color:#16A34A;background:rgba(22,163,74,.22);box-shadow:0 0 0 2px #16A34A}
+.qopt.wrong{border-color:#DC2626;background:rgba(220,38,38,.20);box-shadow:0 0 0 2px #DC2626}
+.qopt.right .mark::before{content:"\2713\00a0"}
+.qopt.wrong .mark::before{content:"\2717\00a0"}
+.qresult.ok,.qresult.no{padding:14px 16px;border-radius:14px;border-left:6px solid}
+.qresult.ok{border-color:#16A34A;background:rgba(22,163,74,.16)}
+.qresult.no{border-color:#DC2626;background:rgba(220,38,38,.14)}
+.qresult.ok b::before{content:"\2713\00a0"}
+.qresult.no b::before{content:"\2717\00a0"}
