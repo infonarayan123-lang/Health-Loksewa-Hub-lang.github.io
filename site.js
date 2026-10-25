@@ -859,7 +859,16 @@
     fMore.addEventListener('click', function(){ fS.shown += 30; fDraw(); });
     getJSON('siteFaqs', 9000).then(function(d){
       fAll = cleanFaqs(d && d.faqs); fLoading.hidden = true;
-      if(!fAll.length){ showNone(fNone, ['siteFaqs']); return; }
+      var fDef = document.getElementById('fqDefaults');
+      if(!fAll.length){
+        if(fDef){   /* no questions in the Sheet (or it did not answer): the answers written in the page stay, and can be searched */
+          var dItems = all('details', fDef); fTools.hidden = false; fCats.hidden = true;
+          fSearch.addEventListener('input', function(){ var q = txt(fSearch.value, 80).toLowerCase(), n = 0; dItems.forEach(function(it){ var ok = !q || it.textContent.toLowerCase().indexOf(q) !== -1; it.hidden = !ok; if(ok) n++; }); fEmpty.hidden = n > 0; fCount.textContent = ''; });
+          return;
+        }
+        showNone(fNone, ['siteFaqs']); return;
+      }
+      if(fDef) fDef.hidden = true;
       var cats = [], seen = Object.create(null); fAll.forEach(function(f){ if(f.cat && !(f.cat in seen) && cats.length < 12){ seen[f.cat] = 1; cats.push(f.cat); } });
       if(cats.length > 1){
         clear(fCats);
