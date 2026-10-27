@@ -6,6 +6,7 @@
     mail:     'healthloksewa026@gmail.com',   /* used by "Found a mistake? Tell us" under the shared question; the Contact page uses App Settings */
     appUrl:   'https://infonarayan123-lang.github.io/Health-loksewa-app/',   /* where "Open the app" goes */
     legalUrl: 'https://infonarayan123-lang.github.io/Health-loksewa-app/',   /* where privacy.html, terms.html ... live */
+    signIn:   false,                                                         /* true = every visitor sees "Sign in" in the menu (keep false until you have tested it; open the site once with ?signin=1 to test on your own phone) */
     apkUrl:   '',                                                            /* a direct link to the APK file, when you have one */
     playUrl:  '',                                                            /* your Google Play link, when you have one */
     api:      'https://script.google.com/macros/s/AKfycbzrqtH4b98Ac8JkBBFkI6k7uoAr9h0bK_9YYZwvCdhUTQafBZYj2JdBS9-lNtHzT-MfMw/exec'
@@ -27,7 +28,7 @@
      3. If the Sheet does not answer, it is asked ONE more time at once (the first request often only wakes it up).
      4. If it still fails and nothing is remembered, the page says so clearly and offers "Try again" (it never says "coming soon" for a failure). ---------- */
   var netFail = Object.create(null);
-  var CACHE_RE = /^(siteNews|siteLinks|siteDocuments|siteProducts|siteHealthDays|sitePublicHolidays|siteFaqs|siteTestimonials|siteCompany|appSettings)(&|$)/;
+  var CACHE_RE = /^(siteNews|siteLinks|siteDocuments|siteProducts|siteHealthDays|sitePublicHolidays|siteFaqs|siteTestimonials|sitePeople|siteCompany|appSettings)(&|$)/;
   function cacheGet(action){
     var m = CACHE_RE.exec(action); if(!m) return null;
     try{ var o = JSON.parse(localStorage.getItem('hl:c:' + action)), age = Date.now() - o.t, max = (m[1] === 'siteNews' ? 3 : 24) * 3600000; if(o && typeof o.t === 'number' && o.d && typeof o.d === 'object' && age >= 0 && age < max) return o; }catch(e){}
@@ -1088,5 +1089,30 @@
     var disc = foot.querySelector('.disc'); if(disc) foot.insertBefore(box, disc); else foot.appendChild(box);
   })();
 
+
+  /* ---------- optional website sign-in: the same account as the app. Hidden unless SITE.signIn is true or this browser was switched on with ?signin=1. auth.js loads only when needed. ---------- */
+  (function(){
+    var on = SITE.signIn === true, kT = 'hl:signin-test', kA = 'hl:auth', stored = '';
+    try{
+      var q = location.search; if(/[?&]signin=1(&|$)/.test(q)) localStorage.setItem(kT, '1'); if(/[?&]signin=0(&|$)/.test(q)) localStorage.removeItem(kT);
+      if(localStorage.getItem(kT) === '1') on = true; stored = (localStorage.getItem(kA) || '').slice(0, 20);
+    }catch(e){}
+    var ul = on ? document.querySelector('nav.main ul') : null; if(!ul) return;
+    document.documentElement.className += ' hl-si';   /* with the extra button the inline menu does not fit: the compact Menu button is used on every screen size */
+    var li = document.createElement('li'); li.className = 'signin-li';
+    var b = document.createElement('button'); b.type = 'button'; b.id = 'siBtn'; b.className = 'btn btn-ghost btn-sm'; b.setAttribute('aria-haspopup', 'dialog'); b.textContent = stored ? 'Hi, ' + stored : 'Sign in';
+    li.appendChild(b); ul.insertBefore(li, ul.lastElementChild);
+    var loading = null;
+    function load(){
+      if(window.HLAuth) return Promise.resolve(window.HLAuth);
+      if(!loading) loading = new Promise(function(res, rej){ var s = document.createElement('script'); s.src = 'auth.js'; s.onload = function(){ if(window.HLAuth) res(window.HLAuth); else { loading = null; rej(); } }; s.onerror = function(){ loading = null; rej(); }; document.head.appendChild(s); });
+      return loading;
+    }
+    b.addEventListener('click', function(){
+      b.disabled = true;
+      load().then(function(a){ b.disabled = false; a.open(b); }, function(){ b.disabled = false; if(https(SITE.appUrl)) location.href = SITE.appUrl; });   /* if the sign-in program cannot load, the app's own sign-in is always there */
+    });
+    if(stored){ var idle = window.requestIdleCallback || function(f){ setTimeout(f, 1500); }; idle(function(){ load().then(function(a){ a.init(); }, function(){}); }); }
+  })();
   window.HLSite = { SITE: SITE, https: https, email: email, txt: txt, niceDate: niceDate, DEFAULT_LINKS: DEFAULT_LINKS, cleanNews: cleanNews, cleanLinks: cleanLinks, cleanDocs: cleanDocs, cleanQotd: cleanQotd, calc: CALC, netFail: netFail, u: { el: el, clear: clear, all: all, txt: txt, stripTags: stripTags, isoDate: isoDate, niceDate: niceDate, https: https, getJSON: getJSON, getNews: getNews, getDocs: getDocs, cleanNews: cleanNews, cleanDocs: cleanDocs } };
 })();

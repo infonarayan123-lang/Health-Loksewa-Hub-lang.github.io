@@ -29,7 +29,8 @@
     { t: 'Question of the day', u: 'question-of-the-day.html', k: 'question day daily mcq quiz' },
     { t: 'FAQs', u: 'faqs.html', k: 'faq faqs questions answers help' },
     { t: 'Contact us', u: 'contact.html', k: 'contact email message support feedback problem write' },
-    { t: 'About Health Loksewa', u: 'about.html', k: 'about us company who we are' }
+    { t: 'About Health Loksewa', u: 'about.html', k: 'about us company who we are' },
+    { t: 'How we prepare and check our content', u: 'content-policy.html', k: 'content quality checked questions answers mistake report correction ai past model questions textbook' }
   ];
   H.searchPages = PAGES;
   var GROUPS = [

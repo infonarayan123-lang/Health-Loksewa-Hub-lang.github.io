@@ -549,3 +549,73 @@ a.btn[aria-disabled="true"]:not([href]){cursor:default;border-style:dashed;box-s
 .qresult.no{border-color:#DC2626;background:rgba(220,38,38,.14)}
 .qresult.ok b::before{content:"\2713\00a0"}
 .qresult.no b::before{content:"\2717\00a0"}
+
+/* the open menu never grows taller than the screen: it scrolls inside (the header is sticky, so the page itself cannot scroll it into view) */
+nav.main.open{max-height:calc(100vh - 76px);max-height:calc(100dvh - 76px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+
+/* website sign-in (hidden unless switched on) */
+@media (min-width:901px){
+  html.hl-si .nav-toggle{display:inline-flex;align-items:center}
+  html.hl-si nav.main{display:none;position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 20px 16px}
+  html.hl-si nav.main.open{display:block}
+  html.hl-si nav.main ul{flex-direction:column;align-items:stretch;gap:2px}
+  html.hl-si nav.main a{width:100%}
+  html.hl-si nav.main li.more{display:list-item}
+  html.hl-si nav.main li.more a{color:var(--ink2);font-weight:600}
+  html.hl-si nav.main li.more.first{border-top:1px solid var(--line);margin-top:6px;padding-top:6px}
+}
+.signin-li{display:flex;align-items:center}
+#siBtn{min-height:44px}
+.sidlg-back{position:fixed;inset:0;background:rgba(5,10,25,.74);display:flex;align-items:center;justify-content:center;padding:14px;z-index:1000}
+.sidlg-back[hidden]{display:none}
+.sidlg{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:20px;max-width:420px;width:100%;max-height:92vh;overflow:auto;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.sidlg h2{margin:0 0 8px;font-size:1.35rem}
+.sidlg h2:focus{outline:none}
+.sidlg p{margin:8px 0}
+.sidlg .sismall{font-size:.92rem;color:var(--ink2)}
+.sidlg .sibtn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin-top:10px;text-align:center}
+.sidlg .sior{text-align:center;color:var(--ink2);margin:16px 0 4px;font-size:.92rem}
+.sidlg .sifield{margin-top:10px}
+.sidlg label{display:block;font-weight:700;margin:0 0 6px}
+.sidlg input[type=email],.sidlg input[type=password],.sidlg input[type=text]{width:100%;min-height:48px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.sidlg input:focus-visible,.sidlg button:focus-visible,.sidlg a:focus-visible{outline:3px solid var(--c-teal);outline-offset:2px}
+.sidlg .sicheck{display:flex;align-items:center;gap:8px;font-weight:400;margin:10px 0 0;min-height:44px}
+.sidlg .sicheck input{width:22px;height:22px}
+.sidlg .silinkbtn{display:block;margin:12px auto 0;min-height:44px;padding:0 10px;background:none;border:0;color:var(--ink);font:inherit;text-decoration:underline;cursor:pointer}
+.sidlg .siclose{display:block;width:100%;min-height:48px;margin-top:14px;background:none;border:1.5px solid var(--line);border-radius:12px;color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.sidlg .sistatus{min-height:0;margin:12px 0 0;padding:0}
+.sidlg .sistatus.err,.sidlg .sistatus.ok{padding:10px 12px;border-radius:10px;border-left:5px solid}
+.sidlg .sistatus.err{background:#FEE2E2;color:#7F1D1D;border-color:#DC2626}
+.sidlg .sistatus.ok{background:#DCFCE7;color:#14532D;border-color:#16A34A}
+/* THE HEALTH LOKSEWA THEME: one motivation band, the same on the website and in the app */
+.hlj{ position:relative; margin:22px 0; padding:22px 18px 20px; border-radius:20px; color:#FFFFFF; overflow:hidden; background-color:#2563EB; background-image:linear-gradient(135deg,#6D28D9 0%,#2563EB 52%,#0F766E 100%); box-shadow:0 10px 26px rgba(76,29,149,0.32), inset 0 0 0 1px rgba(255,255,255,0.16); }
+.hlj-top{ display:flex; align-items:center; gap:14px; }
+.hlj-art{ flex:none; width:54px; height:54px; }
+.hlj-eyebrow{ margin:0 0 4px; font-size:11px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#FFFFFF; }
+.hlj-eyebrow::before{ content:""; display:inline-block; width:18px; height:3px; margin-right:8px; vertical-align:middle; border-radius:2px; background:#FFD54A; }
+.hlj-title{ margin:0; font-size:22px; line-height:1.25; font-weight:800; color:#FFFFFF; }
+.hlj-ne{ margin:4px 0 0; font-size:15px; font-weight:600; color:#FFFFFF; }
+.hlj-story{ margin:12px 0 18px; font-size:14px; line-height:1.55; color:#FFFFFF; }
+.hlj-steps{ list-style:none; margin:0; padding:0; display:flex; }
+.hlj-steps li{ flex:1; min-width:0; position:relative; text-align:center; font-size:11.5px; font-weight:700; color:#FFFFFF; }
+.hlj-steps li::before{ content:""; position:absolute; top:15px; left:-50%; width:100%; height:2px; background:rgba(255,255,255,0.55); }
+.hlj-steps li:first-child::before{ display:none; }
+.hlj-dot{ position:relative; z-index:1; display:flex; align-items:center; justify-content:center; width:30px; height:30px; margin:0 auto 6px; border-radius:50%; background:#FFFFFF; color:#4C1D95; font-size:13px; font-weight:800; }
+.hlj-steps li:last-child .hlj-dot{ background:#FFD54A; color:#4C1D95; }
+@media (max-width:380px){ .hlj{ padding:20px 14px 18px; } .hlj-title{ font-size:20px; } .hlj-story{ font-size:13.5px; } .hlj-art{ width:46px; height:46px; } }
+/* PEOPLE: photo cards on Home. Hidden unless the Sheet tab "Site People" has people with a working photo in the people/ folder. */
+.people{padding:34px 0 8px}
+.people[hidden],.pcard[hidden]{display:none !important}
+.people-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-top:20px}
+@media (min-width:700px){.people-grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.people-grid{grid-template-columns:repeat(3,1fr)}}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 10px 26px rgba(15,23,42,.14)}
+.pcard-photo{position:relative;aspect-ratio:4/5;background:#1E2A4A}
+.pcard-photo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(180deg,rgba(11,28,61,0) 0%,rgba(11,28,61,.55) 100%);pointer-events:none}
+.pcard-img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top}
+.pcard-badge{position:absolute;z-index:1;left:12px;top:12px;max-width:calc(100% - 24px);padding:6px 12px;border-radius:999px;background:#FFFFFF;color:#4C1D95;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 2px 8px rgba(0,0,0,.2);overflow-wrap:anywhere}
+.pcard-body{padding:16px 18px 18px}
+.pcard-name{margin:0;font-size:1.25rem;font-weight:800;color:var(--ink);line-height:1.25;overflow-wrap:anywhere}
+.pcard-title{margin:4px 0 0;color:var(--ink2);font-weight:600;overflow-wrap:anywhere}
+.pcard-note{margin:10px 0 0;color:var(--muted);line-height:1.55;overflow-wrap:anywhere}
+.pcard-btn{margin-top:14px;display:flex;justify-content:center;width:100%}
