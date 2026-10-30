@@ -6,10 +6,11 @@
     mail:     'healthloksewa026@gmail.com',   /* used by "Found a mistake? Tell us" under the shared question; the Contact page uses App Settings */
     appUrl:   'https://infonarayan123-lang.github.io/Health-loksewa-app/',   /* where "Open the app" goes */
     legalUrl: 'https://infonarayan123-lang.github.io/Health-loksewa-app/',   /* where privacy.html, terms.html ... live */
-    signIn:   false,                                                         /* true = every visitor sees "Sign in" in the menu (keep false until you have tested it; open the site once with ?signin=1 to test on your own phone) */
+    signIn:   true,                                                          /* true = every visitor sees "Sign in" in the menu (keep false until you have tested it; open the site once with ?signin=1 to test on your own phone) */
+    lang:     false,   /* true = every visitor sees the English / नेपाली button (turn on after the Nepali has been checked) */
     apkUrl:   '',                                                            /* a direct link to the APK file, when you have one */
     playUrl:  '',                                                            /* your Google Play link, when you have one */
-    api:      'https://script.google.com/macros/s/AKfycbzrqtH4b98Ac8JkBBFkI6k7uoAr9h0bK_9YYZwvCdhUTQafBZYj2JdBS9-lNtHzT-MfMw/exec'
+    api:      'https://script.google.com/macros/s/AKfycbxmyJxdGGZmbjCCEDdQ0GrX4C8QQpO9OzSczy_CDaizIZNxC0de6foO1bgXhi9P1sgwHQ/exec'
   };
   /* ======= nothing below needs editing ======= */
   var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1112,6 +1113,15 @@
       b.disabled = true;
       load().then(function(a){ b.disabled = false; a.open(b); }, function(){ b.disabled = false; if(https(SITE.appUrl)) location.href = SITE.appUrl; });   /* if the sign-in program cannot load, the app's own sign-in is always there */
     });
+    /* the same two buttons in the HEADER BAR (beside Menu), so nobody has to open the menu to find them */
+    var bar = document.querySelector('header.site .bar'), tg = document.getElementById('navToggle');
+    if(bar && tg){
+      var sb = document.createElement('div'); sb.className = 'si-bar'; var app = ul.querySelector('a[data-app]');
+      if(app){ var oa = app.cloneNode(true); oa.className += ' si-open'; sb.appendChild(oa); }
+      var t2 = document.createElement('button'); t2.type = 'button'; t2.id = 'siTop'; t2.className = 'btn btn-ghost btn-sm si-top'; t2.setAttribute('aria-haspopup', 'dialog'); t2.textContent = b.textContent; sb.appendChild(t2); bar.insertBefore(sb, tg);
+      t2.addEventListener('click', function(){ t2.disabled = true; load().then(function(a){ t2.disabled = false; a.open(t2); }, function(){ t2.disabled = false; if(https(SITE.appUrl)) location.href = SITE.appUrl; }); });
+      try{ new MutationObserver(function(){ t2.textContent = b.textContent; }).observe(b, { childList: true, characterData: true, subtree: true }); }catch(e){}
+    }
     if(stored){ var idle = window.requestIdleCallback || function(f){ setTimeout(f, 1500); }; idle(function(){ load().then(function(a){ a.init(); }, function(){}); }); }
   })();
   window.HLSite = { SITE: SITE, https: https, email: email, txt: txt, niceDate: niceDate, DEFAULT_LINKS: DEFAULT_LINKS, cleanNews: cleanNews, cleanLinks: cleanLinks, cleanDocs: cleanDocs, cleanQotd: cleanQotd, calc: CALC, netFail: netFail, u: { el: el, clear: clear, all: all, txt: txt, stripTags: stripTags, isoDate: isoDate, niceDate: niceDate, https: https, getJSON: getJSON, getNews: getNews, getDocs: getDocs, cleanNews: cleanNews, cleanDocs: cleanDocs } };

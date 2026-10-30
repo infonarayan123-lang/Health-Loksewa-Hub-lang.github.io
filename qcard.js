@@ -3,7 +3,8 @@
    window.HLCard.make(question, { kind: 'question' | 'answer', format: 'square' | 'story' }) returns a canvas. */
 (function(){
   'use strict';
-  var FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", sans-serif';
+  var FONT = 'Tinos, "Noto Serif Devanagari", "Times New Roman", Times, serif';
+  try{ if(document.fonts && document.fonts.load){ document.fonts.load('400 20px Tinos'); document.fonts.load('700 20px Tinos'); document.fonts.load('700 20px "Noto Serif Devanagari"', '\u0905'); } }catch(e){}   /* start loading the fonts for the picture */
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var W = 1080, MARGIN = 40, INNER = 46, PADX = MARGIN + INNER, IN = W - PADX * 2;
   var NAVY = '#0B1C3D', VIOLET = '#6D28D9';
