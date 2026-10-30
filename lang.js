@@ -25,7 +25,7 @@
     var li = d.createElement('li'); li.className = 'lang-li'; var b = d.createElement('button'); b.type = 'button'; b.id = 'langBtn'; b.className = 'btn btn-ghost btn-sm';
     b.textContent = ne ? 'English' : 'नेपाली'; b.setAttribute('lang', ne ? 'en' : 'ne'); b.setAttribute('aria-label', ne ? 'Show this website in English' : 'यो वेबसाइट नेपालीमा हेर्नुहोस्');
     b.addEventListener('click', function(){ try{ if(ne) localStorage.removeItem(K); else localStorage.setItem(K, 'ne'); }catch(e){} location.href = location.pathname + location.hash; });
-    li.appendChild(b); var last = ul.lastElementChild; ul.insertBefore(li, last && last.querySelector('a[data-app]') ? last : null);
+    li.appendChild(b); var ap = ul.querySelector('a[data-app]'), ref = ap && ap.parentNode && ap.parentNode.parentNode === ul ? ap.parentNode : null; ul.insertBefore(li, ref); window.dispatchEvent(new Event('hl-fit'));   /* before Open the app: Sign in stays right after it */
   }
   function ready(f){ if(d.readyState === 'loading') d.addEventListener('DOMContentLoaded', f); else f(); }
   ready(function(){ setTimeout(toggle, 0); });
@@ -34,7 +34,7 @@
   var fin = false; function reveal(){ H.classList.remove('hl-ne-wait'); }
   setTimeout(reveal, 2500);
   var left = 2, dom = false; function go(){ if(fin || left > 0 || !dom) return; fin = true;
-    walk(d.body); var tt = tr(d.title); if(tt !== null) d.title = tt; H.lang = 'ne';
+    walk(d.body); var tt = tr(d.title); if(tt !== null) d.title = tt; H.lang = 'ne'; window.dispatchEvent(new Event('hl-fit'));
     try{ new MutationObserver(function(ms){ ms.forEach(function(x){ if(x.type === 'characterData') node(x.target); else for(var i = 0; i < x.addedNodes.length; i++) walk(x.addedNodes[i]); }); }).observe(d.body, { childList: true, subtree: true, characterData: true }); }catch(e){}
     reveal(); }
   ['lang-ne-1.js', 'lang-ne-2.js'].forEach(function(f){ var s = d.createElement('script'); s.src = f; s.async = true; s.onload = function(){ left--; go(); }; s.onerror = function(){ left = 99; reveal(); }; d.head.appendChild(s); });

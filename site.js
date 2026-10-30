@@ -1082,7 +1082,7 @@
     SIZES.forEach(function(sz, i){
       var b = el('button', 'tsbtn', SHORT[i]); b.type = 'button'; b.setAttribute('aria-label', LABELS[i]); b.setAttribute('aria-pressed', sz === cur ? 'true' : 'false'); b.setAttribute('data-size', String(sz));
       b.addEventListener('click', function(){
-        cur = sz; document.documentElement.style.fontSize = cur + '%'; try{ localStorage.setItem(KEY, String(cur)); }catch(e){}
+        cur = sz; document.documentElement.style.fontSize = cur + '%'; window.dispatchEvent(new Event('hl-fit')); try{ localStorage.setItem(KEY, String(cur)); }catch(e){}
         all('.tsbtn').forEach(function(x){ x.setAttribute('aria-pressed', Number(x.getAttribute('data-size')) === cur ? 'true' : 'false'); });
       });
       box.appendChild(b);
@@ -1102,7 +1102,7 @@
     document.documentElement.className += ' hl-si';   /* with the extra button the inline menu does not fit: the compact Menu button is used on every screen size */
     var li = document.createElement('li'); li.className = 'signin-li';
     var b = document.createElement('button'); b.type = 'button'; b.id = 'siBtn'; b.className = 'btn btn-ghost btn-sm'; b.setAttribute('aria-haspopup', 'dialog'); b.textContent = stored ? 'Hi, ' + stored : 'Sign in';
-    li.appendChild(b); ul.insertBefore(li, ul.lastElementChild);
+    li.appendChild(b); ul.appendChild(li);   /* after the Open the app item */
     var loading = null;
     function load(){
       if(window.HLAuth) return Promise.resolve(window.HLAuth);
@@ -1120,7 +1120,14 @@
       if(app){ var oa = app.cloneNode(true); oa.className += ' si-open'; sb.appendChild(oa); }
       var t2 = document.createElement('button'); t2.type = 'button'; t2.id = 'siTop'; t2.className = 'btn btn-ghost btn-sm si-top'; t2.setAttribute('aria-haspopup', 'dialog'); t2.textContent = b.textContent; sb.appendChild(t2); bar.insertBefore(sb, tg);
       t2.addEventListener('click', function(){ t2.disabled = true; load().then(function(a){ t2.disabled = false; a.open(t2); }, function(){ t2.disabled = false; if(https(SITE.appUrl)) location.href = SITE.appUrl; }); });
-      try{ new MutationObserver(function(){ t2.textContent = b.textContent; }).observe(b, { childList: true, characterData: true, subtree: true }); }catch(e){}
+      var root = document.documentElement, ft = null;
+      /* WIDE SCREENS show the full menu bar (page links, then Open the app, then Sign in); if it does not fit (very large text, a long name, Nepali) the compact header is used instead */
+      function fit(){ root.classList.remove('hl-narrow'); if(!window.matchMedia || !window.matchMedia('(min-width:1340px)').matches) return; if(bar.scrollWidth > bar.clientWidth + 1 || bar.getBoundingClientRect().height > 84) root.classList.add('hl-narrow'); }
+      function fitSoon(){ clearTimeout(ft); ft = setTimeout(fit, 60); }
+      try{ new MutationObserver(function(){ t2.textContent = b.textContent; fitSoon(); }).observe(b, { childList: true, characterData: true, subtree: true }); }catch(e){}
+      window.addEventListener('resize', fitSoon); window.addEventListener('hl-fit', fitSoon);
+      try{ if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit); }catch(e){}
+      fit();
     }
     if(stored){ var idle = window.requestIdleCallback || function(f){ setTimeout(f, 1500); }; idle(function(){ load().then(function(a){ a.init(); }, function(){}); }); }
   })();
