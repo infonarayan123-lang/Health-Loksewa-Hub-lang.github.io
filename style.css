@@ -651,3 +651,15 @@ html.hl-si .nav-toggle{margin-left:6px}
 }
 /* Nepali words are longer: let the exam cards wrap a long word instead of overflowing */
 html[lang="ne"] .excard,html[lang="ne"] .excard *{overflow-wrap:anywhere;min-width:0}
+
+/* WIDE SCREENS with sign-in: the full menu bar as before (page links, then Open the app, then Sign in). Below 1340 px, or when the bar does not fit (the page adds hl-narrow), the compact header above is used. */
+@media (min-width:1340px){
+  html.hl-si:not(.hl-narrow) header .wrap{max-width:1360px}
+  html.hl-si:not(.hl-narrow) .nav-toggle,html.hl-si:not(.hl-narrow) .si-bar{display:none}
+  html.hl-si:not(.hl-narrow) nav.main{display:block;position:static;background:none;border:0;padding:0;max-height:none;overflow:visible}
+  html.hl-si:not(.hl-narrow) nav.main ul{flex-direction:row;align-items:center;gap:4px}
+  html.hl-si:not(.hl-narrow) nav.main a{width:auto}
+  html.hl-si:not(.hl-narrow) nav.main li.more{display:none}
+  html.hl-si:not(.hl-narrow) header.site .bar{flex-wrap:nowrap}
+  html.hl-si:not(.hl-narrow) .signin-li #siBtn{max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
