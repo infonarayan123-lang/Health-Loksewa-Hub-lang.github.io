@@ -12,7 +12,7 @@
     var g = n.match(/^(\d{1,2}) ([A-Z][a-z]+) (\d{4})$/); if(g){ var mo = D[h(g[2])]; if(mo !== undefined) return dig(g[1]) + ' ' + mo + ' ' + dig(g[3]); }
     return null;
   }
-  function node(n){ var v = n.nodeValue, r = tr(v); if(r !== null){ n.nodeValue = v.match(/^\s*/)[0] + r + v.match(/\s*$/)[0]; } }
+  function node(n){ var v = n.nodeValue, r = tr(v); if(r !== null){ var nv = v.match(/^\s*/)[0] + r + v.match(/\s*$/)[0]; if(nv !== v) n.nodeValue = nv; } }
   function attrs(el){ ['placeholder', 'title', 'aria-label', 'alt', 'data-none'].forEach(function(a){ var v = el.getAttribute && el.getAttribute(a); if(v){ var r = tr(v); if(r !== null) el.setAttribute(a, r); } }); }
   function walk(x){
     if(!x) return; if(x.nodeType === 3){ node(x); return; } if(x.nodeType !== 1) return;
