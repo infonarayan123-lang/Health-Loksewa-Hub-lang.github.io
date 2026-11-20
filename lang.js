@@ -30,6 +30,7 @@
   function ready(f){ if(d.readyState === 'loading') d.addEventListener('DOMContentLoaded', f); else f(); }
   ready(function(){ setTimeout(toggle, 0); setTimeout(toggle, 400); setTimeout(toggle, 1500); });   /* toggle() does nothing twice */
   if(!ne) return;
+  window.HL_TR = tr;   /* the search page uses this to translate a whole result before it marks the matching words */
   var st = d.createElement('style'); st.textContent = 'html.hl-ne-wait{visibility:hidden}'; d.head.appendChild(st); H.classList.add('hl-ne-wait');
   var fin = false; function reveal(){ H.classList.remove('hl-ne-wait'); }
   setTimeout(reveal, 2500);

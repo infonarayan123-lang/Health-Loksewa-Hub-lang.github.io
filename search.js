@@ -80,6 +80,7 @@
   }
   /* shows the text with the matching words marked (as real mark elements, never as HTML text) */
   function marked(parent, text, toks){
+    if(window.HL_TR){ var z = null; try{ z = window.HL_TR(text); }catch(e){} if(z !== null && z !== undefined) text = z; }   /* Nepali: translate the WHOLE text first (a marked word would split it into pieces that cannot be translated) */
     var low = text.toLowerCase(), r = [];
     toks.forEach(function(t){ var p = 0, k; while((k = low.indexOf(t, p)) !== -1){ r.push([k, k + t.length]); p = k + t.length; } });
     r.sort(function(a, b){ return a[0] - b[0]; });

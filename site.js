@@ -10,7 +10,7 @@
     lang:     true,   /* true = every visitor sees the English / नेपाली button (turn on after the Nepali has been checked) */
     apkUrl:   '',                                                            /* a direct link to the APK file, when you have one */
     playUrl:  '',                                                            /* your Google Play link, when you have one */
-    api:      'https://script.google.com/macros/s/AKfycbxSgR2V-KCrefl1nvGQW3qlvu-z42uHz2CtYoI8mn-3VLMJtsXdZ3QA9h7e2xQsZKhuHA/exec'
+    api:      'https://script.google.com/macros/s/AKfycbzQOc8DqEOdd-X7OLEG5z4VRoWpVBOd_bHjYUk2tVngdp9LkFN_W3VqmHkKdfLfqifHOw/exec'
   };
   /* ======= nothing below needs editing ======= */
   var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
