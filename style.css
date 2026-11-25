@@ -261,7 +261,7 @@ section.feat.vivid::before{display:none}
 .crumbs a{color:#FFFFFF}
 .crumbs [aria-current]{color:#FFFFFF;font-weight:800}
 .crumbs i{font-style:normal;margin:0 8px}
-nav.main a[aria-current="page"]{color:var(--ink);background:var(--panel)}
+nav.main a[aria-current="page"],nav.main a[aria-current="true"]{color:var(--ink);background:var(--panel)}
 /* link directory */
 .linkgroup{margin-bottom:38px}
 .linkgroup h2{font-size:1.45rem;margin-bottom:4px}
