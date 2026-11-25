@@ -713,3 +713,17 @@ section:not(.feat) .card,.steps li,.plan:not(.pro){background-image:linear-gradi
   .hero .blob.b1,.hero .blob.b2{animation:floaty 9s ease-in-out infinite}
   .stat .si{transition:transform .25s ease} .stat:hover .si{transform:rotate(-6deg) scale(1.08)}
 }
+
+/* Website graphics F: the "Your journey" band comes alive. Dots pop in one by one, the lines grow between them, the star glows softly. Decoration only: it shows no progress or numbers. Off when the phone asks for reduced motion. */
+@media (prefers-reduced-motion: no-preference){
+  .js .hlj.in .hlj-art{ animation:hlArtFloat 4s ease-in-out infinite; }
+  .js .hlj.in .hlj-dot{ animation:hlDotPop .5s cubic-bezier(.3,1.5,.5,1) backwards; }
+  .js .hlj.in .hlj-steps li::before{ transform-origin:left center; animation:hlLineGrow .35s ease-out backwards; }
+  .js .hlj.in .hlj-steps li:nth-child(2) .hlj-dot{ animation-delay:.3s; } .js .hlj.in .hlj-steps li:nth-child(3) .hlj-dot{ animation-delay:.6s; } .js .hlj.in .hlj-steps li:nth-child(4) .hlj-dot{ animation-delay:.9s; } .js .hlj.in .hlj-steps li:nth-child(5) .hlj-dot{ animation-delay:1.2s; }
+  .js .hlj.in .hlj-steps li:nth-child(2)::before{ animation-delay:.1s; } .js .hlj.in .hlj-steps li:nth-child(3)::before{ animation-delay:.4s; } .js .hlj.in .hlj-steps li:nth-child(4)::before{ animation-delay:.7s; } .js .hlj.in .hlj-steps li:nth-child(5)::before{ animation-delay:1s; }
+  .js .hlj.in .hlj-steps li:last-child .hlj-dot{ animation:hlDotPop .5s cubic-bezier(.3,1.5,.5,1) 1.2s backwards, hlStarGlow 2.8s ease-in-out 2s infinite; }
+}
+@keyframes hlDotPop{ from{ transform:scale(0); opacity:0; } to{ transform:none; opacity:1; } }
+@keyframes hlLineGrow{ from{ transform:scaleX(0); } to{ transform:none; } }
+@keyframes hlStarGlow{ 0%,100%{ box-shadow:0 0 0 0 rgba(255,213,74,0); } 50%{ box-shadow:0 0 0 6px rgba(255,213,74,.3); } }
+@keyframes hlArtFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
