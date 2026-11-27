@@ -832,3 +832,27 @@ main>section:not(.vivid)::after{content:"";position:absolute;left:8%;right:8%;bo
 #mdGrid.md-grid{display:block}
 @media (max-width:600px){.md-grid{grid-template-columns:1fr 1fr;gap:12px}.md-card{padding:14px 12px}.md-card h3{font-size:1rem}.md-card p{font-size:.85rem}.md-ic{width:38px;height:38px}.md-card .btn{padding:8px 12px;white-space:normal;text-align:center}}
 @media (prefers-reduced-motion: no-preference){.md-card{animation:hlIRise .5s ease-out backwards}}
+
+/* HL-LIB-M: document lists look like the app's cards (colour chip, 6-colour cycle, pill filters) */
+.doclist>.docitem{--a:var(--c-teal);position:relative;border-left-width:1px;border-top:4px solid var(--a);padding:14px 16px 14px 70px;min-height:68px;transition:transform .2s ease,box-shadow .2s ease}
+.doclist>.docitem:nth-child(6n+2){--a:#8B5CF6}.doclist>.docitem:nth-child(6n+3){--a:#F59E0B}.doclist>.docitem:nth-child(6n+4){--a:#F43F5E}.doclist>.docitem:nth-child(6n+5){--a:#38BDF8}.doclist>.docitem:nth-child(6n+6){--a:#22C55E}
+.doclist>.docitem::before{content:"";position:absolute;left:16px;top:16px;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--a),color-mix(in srgb,var(--a) 55%,#000));box-shadow:0 8px 16px -8px var(--a);
+ -webkit-mask:none;mask:none}
+.doclist>.docitem::after{content:"";position:absolute;left:27px;top:26px;width:18px;height:20px;background:#fff;border-radius:3px;clip-path:polygon(0 0,70% 0,100% 28%,100% 100%,0 100%)}
+.doclist>.docitem:hover{transform:translateY(-2px);box-shadow:0 14px 26px -16px var(--a)}
+.doclist>.docitem .xpill{align-self:flex-start}
+#libSections,#libAz{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;scrollbar-width:thin}
+#libSections .fchip,#libAz .fchip{flex:0 0 auto}
+@media (max-width:600px){.doclist>.docitem{padding:12px 12px 12px 62px}.doclist>.docitem::before{left:12px;top:14px;width:36px;height:36px}.doclist>.docitem::after{left:22px;top:23px;width:16px;height:18px}}
+@media (prefers-reduced-motion: no-preference){.doclist>.docitem{animation:hlIRise .45s ease-out backwards}}
+
+/* HL-NEWSBOX-N: latest posts from the WordPress news site */
+.wpn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.wpn-card{position:relative;display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px;background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c-teal);border-radius:16px;text-decoration:none;color:var(--ink);transition:transform .2s ease,box-shadow .2s ease}
+.wpn-card:nth-child(6n+2){border-top-color:#8B5CF6}.wpn-card:nth-child(6n+3){border-top-color:#F59E0B}.wpn-card:nth-child(6n+4){border-top-color:#F43F5E}.wpn-card:nth-child(6n+5){border-top-color:#38BDF8}.wpn-card:nth-child(6n+6){border-top-color:#22C55E}
+.wpn-card:hover{transform:translateY(-3px);box-shadow:0 16px 30px -18px rgba(37,99,235,.6)}
+.wpn-cat{align-self:flex-start;font-size:.76rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;border-radius:999px;background:linear-gradient(135deg,#6D28D9,#2563EB);color:#fff}
+.wpn-title{font-weight:800;font-size:1.05rem;line-height:1.35;overflow-wrap:anywhere}
+.wpn-date{font-size:.84rem;color:var(--muted);font-weight:650}
+@media (max-width:600px){.wpn-grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: no-preference){.wpn-card{animation:hlIRise .45s ease-out backwards}}

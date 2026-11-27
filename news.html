@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firestore.googleapis.com; object-src 'none'; frame-src https://health-loksewa.firebaseapp.com; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://news.healthloksewa.com https://script.google.com https://script.googleusercontent.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firestore.googleapis.com; object-src 'none'; frame-src https://health-loksewa.firebaseapp.com; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>News, Notices and Vacancies for Loksewa Aspirants | Health Loksewa</title>
 <meta name="description" content="Short updates, notices, vacancies and exam calendar news for Nepal&#x27;s health Loksewa and licence exam aspirants, each with a link to the official source.">
@@ -73,6 +73,14 @@
     <p class="lead">Short updates for Loksewa and health-exam aspirants, in our own words, each with a link to the official source.</p>
   </div>
 </section>
+<section id="wpNews" class="alt" aria-labelledby="wpn-h" hidden>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">From our news site</span><h2 id="wpn-h">Latest news and vacancies</h2><p>New posts from our news site. Each one opens on news.healthloksewa.com.</p></div>
+    <div class="wpn-grid" id="wpnList"></div>
+    <div class="cta" style="margin-top:22px"><a class="btn btn-ghost" href="https://news.healthloksewa.com" target="_blank" rel="noopener">See all news</a></div>
+  </div>
+</section>
+
 <section id="newsPage" aria-labelledby="nl-h">
   <div class="wrap">
     <h2 id="nl-h" class="vh">News, notices and vacancies</h2>
@@ -122,5 +130,6 @@
 <script src="site.js"></script>
 <script src="texts.js" defer></script>
 <script src="appnav.js" defer></script>
+<script src="news.js" defer></script>
 </body>
 </html>
