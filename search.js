@@ -21,6 +21,7 @@
     { t: 'Library of exam documents', u: 'library.html', k: 'library documents syllabus notices calendars reports pdf download' },
     { t: 'Study packs', u: 'products.html', k: 'packs mock tests ebooks notes courses videos premium free' },
     { t: 'News and vacancies', u: 'news.html', k: 'news vacancy vacancies notice exam closing dates jobs' },
+    { t: 'Past questions and answer keys', u: 'past-questions.html', k: 'past questions papers answer key syllabus exam old question' },
     { t: 'Resources and official links', u: 'resources.html', k: 'resources links official websites commission ministry' },
     { t: 'Tools and calculators', u: 'tools.html', k: 'tools calculators calculator study helpers' },
     { t: 'BMI calculator', u: 'tools.html', k: 'bmi body mass index weight height calculator' },
